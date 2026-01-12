@@ -1,8 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./LandingPage.css";
 
 const LandingPage: React.FC = () => {
-  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<number>(2);
+
+  // Scroll Reveal Animation Logic
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="container">
@@ -10,76 +28,152 @@ const LandingPage: React.FC = () => {
         <div className="logo">PaintByNumbers.AI</div>
         <div className="nav-links">
           <a href="#how-it-works">How It Works</a>
-          <a href="#examples">Examples</a>
-          <a href="#pricing">Pricing</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Level</a>
         </div>
+        <button className="btn btn-secondary" style={{ padding: '8px 20px', fontSize: '0.9rem' }}>
+          Sign In
+        </button>
       </nav>
 
       <header className="hero">
-        <div className="hero-badge">Powered by AI ✨</div>
-        <h1>Transform Photos into<br /><span className="gradient-text">Paint-by-Numbers Art</span></h1>
-        <p>
-          Upload any image and watch as AI converts it into a numbered canvas ready for painting.
-          Perfect for artists of all skill levels.
-        </p>
-        <div className="cta-buttons">
-          <button className="primary-btn">
-            <span>Get Started Free</span>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <button className="secondary-btn">See Examples</button>
+        <div className="hero-pill reveal">
+          <span className="sparkle-icon">✨</span>
+          <span>V1.0  Available </span>
         </div>
-        <div className="hero-stats">
-          <div className="stat">
-            <div className="stat-number">AI-Powered</div>
-            <div className="stat-label">Smart Segmentation</div>
-          </div>
-          <div className="stat">
-            <div className="stat-number">Instant</div>
-            <div className="stat-label">Processing Time</div>
-          </div>
-          <div className="stat">
-            <div className="stat-number">3 Levels</div>
-            <div className="stat-label">Difficulty Options</div>
+        
+        <h1 className="reveal">
+          Turn Photos into<br />
+          <span className="gradient-text">Paint-By-Number Masterpiece</span>
+        </h1>
+        
+        <p className="reveal">
+          AI that converts your photos into 
+          paint-by-number kits.
+        </p>
+
+        <div className="cta-group reveal">
+          <button className="btn btn-primary">
+            Start Creating
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+
+        {/* Visual Placeholder for Art Demo */}
+        <div className="hero-visual reveal">
+          <div className="visual-card">
+            <div className="visual-content">
+              <h3>[ Interactive Before/After Slider ]</h3>
+              <p>Drag to see the AI Transformation</p>
+            </div>
           </div>
         </div>
       </header>
 
-      <section className="levels">
-        <div className="section-header">
-          <h2>Choose Your Difficulty Level</h2>
-          <p>Select the complexity that matches your skill and patience</p>
+      {/* How It Works - Step Cards */}
+      <section id="how-it-works" className="section">
+        <div className="section-header reveal">
+          <h2>From Photo to Canvas</h2>
+          <p>Three simple steps to unleash your inner artist</p>
         </div>
-        <div className="level-cards">
+        
+        <div className="steps-grid">
+          <div className="step-card reveal">
+            <div className="step-number">01</div>
+            <div className="step-icon">📤</div>
+            <h3>Upload Photo</h3>
+            <p>Choose any photo from your gallery. Our AI automatically optimizes contrast and color balance.</p>
+          </div>
+          <div className="step-card reveal" style={{ transitionDelay: '0.1s' }}>
+            <div className="step-number">02</div>
+            <div className="step-icon">🎛️</div>
+            <h3>Customize</h3>
+            <p>Select your difficulty level and palette size. Watch the preview update in real-time.</p>
+          </div>
+          <div className="step-card reveal" style={{ transitionDelay: '0.2s' }}>
+            <div className="step-number">03</div>
+            <div className="step-icon">🎨</div>
+            <h3>Paint & Enjoy</h3>
+            <p>Download your numbered guide and palette sheet. Print it out and start painting!</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Modern Bento Grid Features */}
+      <section id="features" className="section">
+        <div className="section-header reveal">
+          <h2>Why Artists Choose Us</h2>
+          <p>Built for hobbyists, loved by professionals</p>
+        </div>
+        
+        <div className="bento-grid">
+          <div className="bento-item large reveal">
+            <span className="bento-icon">🧠</span>
+            <h3>Smart Segmentation AI</h3>
+            <p>Our proprietary algorithm understands object boundaries better than any other tool, ensuring your painting looks like the original photo, not a jagged mess.</p>
+          </div>
+          
+          <div className="bento-item reveal">
+            <span className="bento-icon">⚡</span>
+            <h3>Instant Processing</h3>
+            <p>Generate high-res vector PDFs in under 5 seconds.</p>
+          </div>
+          
+          <div className="bento-item tall reveal">
+            <span className="bento-icon">🎨</span>
+            <h3>Dynamic Color Matching</h3>
+            <p>We automatically match colors to major paint brands like Liquitex, Golden, and Winsor & Newton. No more guessing which acrylics to buy.</p>
+          </div>
+          
+          <div className="bento-item reveal">
+            <span className="bento-icon">📐</span>
+            <h3>Vector Output</h3>
+            <p>Scale your canvas to any size without losing quality.</p>
+          </div>
+          
+          <div className="bento-item reveal">
+            <span className="bento-icon">💾</span>
+            <h3>Cloud Save</h3>
+            <p>Start on your phone, finish adjusting on your desktop.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Difficulty Selection */}
+      <section id="pricing" className="section">
+        <div className="section-header reveal">
+          <h2>Choose Your Challenge</h2>
+          <p>Find the perfect balance of detail and relaxation</p>
+        </div>
+        
+        <div className="level-cards reveal">
           <div 
             className={`card ${selectedLevel === 1 ? 'selected' : ''}`}
             onClick={() => setSelectedLevel(1)}
           >
-            <div className="card-icon">🌱</div>
             <h3>Beginner</h3>
-            <div className="card-difficulty">Level 1</div>
-            <p>Simple shapes and fewer colors. Perfect for newcomers and quick projects.</p>
+            <div style={{color: '#a5b4fc', marginBottom: '16px', fontWeight: 'bold'}}>Level 1</div>
             <ul className="card-features">
-              <li>20-30 colors</li>
-              <li>Large regions</li>
-              <li>2-3 hours</li>
+              <li>20-30 Colors</li>
+              <li>Larger painting zones</li>
+              <li>Estimated: 2-3 Hours</li>
+              <li>Printable PDF Guide</li>
             </ul>
           </div>
 
           <div 
-            className={`card ${selectedLevel === 2 ? 'selected' : ''}`}
+            className={`card popular ${selectedLevel === 2 ? 'selected' : ''}`}
             onClick={() => setSelectedLevel(2)}
           >
-            <div className="card-icon">🎨</div>
+            <div className="popular-badge">Most Popular</div>
             <h3>Intermediate</h3>
-            <div className="card-difficulty">Level 2</div>
-            <p>Balanced detail with richer colors. Great for weekend projects.</p>
+            <div style={{color: '#a5b4fc', marginBottom: '16px', fontWeight: 'bold'}}>Level 2</div>
             <ul className="card-features">
-              <li>40-60 colors</li>
-              <li>Medium regions</li>
-              <li>5-8 hours</li>
+              <li>40-60 Colors</li>
+              <li>Balanced detail</li>
+              <li>Estimated: 5-8 Hours</li>
+              <li>Printable PDF Guide</li>
+              <li>Color mixing guide</li>
             </ul>
           </div>
 
@@ -87,95 +181,53 @@ const LandingPage: React.FC = () => {
             className={`card ${selectedLevel === 3 ? 'selected' : ''}`}
             onClick={() => setSelectedLevel(3)}
           >
-            <div className="card-icon">🏆</div>
-            <h3>Advanced</h3>
-            <div className="card-difficulty">Level 3</div>
-            <p>High detail with intricate regions. For experienced painters.</p>
+            <h3>Expert</h3>
+            <div style={{color: '#a5b4fc', marginBottom: '16px', fontWeight: 'bold'}}>Level 3</div>
             <ul className="card-features">
-              <li>80-120 colors</li>
-              <li>Small regions</li>
-              <li>15+ hours</li>
+              <li>80+ Colors</li>
+              <li>Photorealistic detail</li>
+              <li>Estimated: 15+ Hours</li>
+              <li>Vector SVG Download</li>
+              <li>Commercial License</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section className="features">
-        <div className="section-header">
-          <h2>Powered by Advanced AI</h2>
-          <p>Everything you need to create stunning paint-by-numbers art</p>
-        </div>
-        <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-icon">🧠</div>
-            <h3>Smart Segmentation</h3>
-            <p>Our AI intelligently identifies regions and boundaries for optimal painting experience</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">🎯</div>
-            <h3>Customizable Detail</h3>
-            <p>Adjust complexity levels to match your skill and available time</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">🖨️</div>
-            <h3>Print Ready</h3>
-            <p>High-resolution output optimized for printing on any canvas size</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">🎨</div>
-            <h3>Color Matching</h3>
-            <p>Auto-generated palettes matched to standard paint brands</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">⚡</div>
-            <h3>Instant Processing</h3>
-            <p>Generate your canvas in seconds, not hours</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">💾</div>
-            <h3>Save & Edit</h3>
-            <p>Store your designs and make adjustments anytime</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="cta-section">
-        <h2>Ready to Create Your Masterpiece?</h2>
-        <p>Join thousands of artists bringing their photos to life</p>
-        <button className="primary-btn large">
-          <span>Start Creating Now</span>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+      <section className="cta-banner reveal">
+        <h2>Ready to Create?</h2>
+        <p style={{marginBottom: '32px', color: 'rgba(255,255,255,0.7)'}}>Click on the button below</p>
+        <button className="btn btn-primary" style={{margin: '0 auto'}}>
+          Get Started for Free
         </button>
       </section>
 
       <footer className="footer">
         <div className="footer-content">
-          <div className="footer-section">
-            <h4>PaintByNumbers.AI</h4>
-            <p>Transforming photos into art since 2024</p>
+          <div>
+            <div className="logo" style={{marginBottom: '20px', display: 'inline-block'}}>PaintByNumbers.AI</div>
+            <p style={{color: 'rgba(255,255,255,0.5)', maxWidth: '300px'}}>
+              Making art accessible to everyone through the power of artificial intelligence.
+            </p>
           </div>
-          <div className="footer-section">
-            <h4>Product</h4>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#examples">Examples</a>
+          <div>
+            <h4 style={{marginBottom: '20px'}}>Product</h4>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Features</a>
+              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Showcase</a>
+              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Pricing</a>
+            </div>
           </div>
-          <div className="footer-section">
-            <h4>Company</h4>
-            <a href="#about">About</a>
-            <a href="#blog">Blog</a>
-            <a href="#contact">Contact</a>
-          </div>
-          <div className="footer-section">
-            <h4>Legal</h4>
-            <a href="#privacy">Privacy</a>
-            <a href="#terms">Terms</a>
+          <div>
+            <h4 style={{marginBottom: '20px'}}>Legal</h4>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Privacy Policy</a>
+              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Terms of Service</a>
+            </div>
           </div>
         </div>
-        <div className="footer-bottom">
-          <p>© 2026 Paint By Numbers AI. Built with ❤️ and Machine Learning</p>
+        <div style={{textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontSize: '0.9rem'}}>
+          © 2026 Paint By Numbers AI.
         </div>
       </footer>
     </div>
