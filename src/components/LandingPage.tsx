@@ -4,6 +4,43 @@ import "./LandingPage.css";
 const LandingPage: React.FC = () => {
   const [selectedLevel, setSelectedLevel] = useState<number>(2);
 
+  // 1. Mouse Position Tracker for Global Spotlight
+  // 1. SMOOTH TRAILING SPOTLIGHT EFFECT
+  useEffect(() => {
+    let mouseX = 0;
+    let mouseY = 0;
+    let spotlightX = 0;
+    let spotlightY = 0;
+
+    // Just update coordinates on mouse move, don't render yet
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    // Animation loop to make the spotlight "chase" the mouse
+    const animateSpotlight = () => {
+      // The 0.1 factor controls the lag. Lower = more lag/smoother.
+      const speed = 0.1; 
+      
+      spotlightX += (mouseX - spotlightX) * speed;
+      spotlightY += (mouseY - spotlightY) * speed;
+
+      document.documentElement.style.setProperty('--mouse-x', `${spotlightX}px`);
+      document.documentElement.style.setProperty('--mouse-y', `${spotlightY}px`);
+
+      requestAnimationFrame(animateSpotlight);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    const animationId = requestAnimationFrame(animateSpotlight);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
+
   // Scroll Reveal Animation Logic
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -24,6 +61,9 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="container">
+      {/* The Global Spotlight Element */}
+      <div className="global-spotlight" />
+
       <nav className="navbar">
         <div className="logo">PaintByNumbers.AI</div>
         <div className="nav-links">
@@ -102,8 +142,8 @@ const LandingPage: React.FC = () => {
       {/* Modern Bento Grid Features */}
       <section id="features" className="section">
         <div className="section-header reveal">
-          <h2>Why Artists Choose Us</h2>
-          <p>Built for hobbyists, loved by professionals</p>
+          <h2>Our Features</h2>
+          <p>Made for everyone, no matter you are a professional artist or a beginner</p>
         </div>
         
         <div className="bento-grid">
