@@ -205,7 +205,7 @@ const LandingPage: React.FC = () => {
             className={`card popular ${selectedLevel === 2 ? 'selected' : ''}`}
             onClick={() => setSelectedLevel(2)}
           >
-            <div className="popular-badge">Most Popular</div>
+            <div className="popular-badge">Recommended</div>
             <h3>Intermediate</h3>
             <div style={{color: '#a5b4fc', marginBottom: '16px', fontWeight: 'bold'}}>Level 2</div>
             <ul className="card-features">
