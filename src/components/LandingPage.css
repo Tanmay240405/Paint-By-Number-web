@@ -317,7 +317,7 @@ body::after {
 .step-number {
   font-size: 4rem;
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.045);
   position: absolute;
   top: 20px;
   right: 20px;
