@@ -1,7 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import BeforeAfterSlider from "./BeforeAfterSlider";
 import "./LandingPage.css";
 
 const LandingPage: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedLevel, setSelectedLevel] = useState<number>(2);
 
   // 1. Mouse Position Tracker for Global Spotlight
@@ -78,7 +81,6 @@ const LandingPage: React.FC = () => {
 
       <header className="hero">
         <div className="hero-pill reveal">
-          <span className="sparkle-icon">✨</span>
           <span>V1.0  Available </span>
         </div>
         
@@ -93,20 +95,19 @@ const LandingPage: React.FC = () => {
         </p>
 
         <div className="cta-group reveal">
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={() => navigate('/create')}>
             Start Creating
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </button>
         </div>
 
-        {/* Visual Placeholder for Art Demo */}
         <div className="hero-visual reveal">
-          <div className="visual-card">
-            <div className="visual-content">
-              <h3>[ Interactive Before/After Slider ]</h3>
-              <p>Drag to see the AI Transformation</p>
-            </div>
-          </div>
+          <BeforeAfterSlider
+            beforeImage="/pbn-original.png"
+            afterImage="/pbn-template.png"
+            beforeLabel="Original"
+            afterLabel="Paint-By-Numbers"
+          />
         </div>
       </header>
 
@@ -120,19 +121,19 @@ const LandingPage: React.FC = () => {
         <div className="steps-grid">
           <div className="step-card reveal">
             <div className="step-number">01</div>
-            <div className="step-icon">📤</div>
+            <div className="step-icon">01</div>
             <h3>Upload Photo</h3>
             <p>Choose any photo from your gallery. Our AI automatically optimizes contrast and color balance.</p>
           </div>
           <div className="step-card reveal" style={{ transitionDelay: '0.1s' }}>
             <div className="step-number">02</div>
-            <div className="step-icon">🎛️</div>
+            <div className="step-icon">02</div>
             <h3>Customize</h3>
             <p>Select your difficulty level and palette size. Watch the preview update in real-time.</p>
           </div>
           <div className="step-card reveal" style={{ transitionDelay: '0.2s' }}>
             <div className="step-number">03</div>
-            <div className="step-icon">🎨</div>
+            <div className="step-icon">03</div>
             <h3>Paint & Enjoy</h3>
             <p>Download your numbered guide and palette sheet. Print it out and start painting!</p>
           </div>
@@ -148,31 +149,31 @@ const LandingPage: React.FC = () => {
         
         <div className="bento-grid">
           <div className="bento-item large reveal">
-            <span className="bento-icon">🧠</span>
+            <span className="bento-icon">—</span>
             <h3>Smart Segmentation AI</h3>
             <p>Our proprietary algorithm understands object boundaries better than any other tool, ensuring your painting looks like the original photo, not a jagged mess.</p>
           </div>
           
           <div className="bento-item reveal">
-            <span className="bento-icon">⚡</span>
+            <span className="bento-icon">—</span>
             <h3>Instant Processing</h3>
             <p>Generate high-res vector PDFs in under 5 seconds.</p>
           </div>
           
           <div className="bento-item tall reveal">
-            <span className="bento-icon">🎨</span>
+            <span className="bento-icon">—</span>
             <h3>Dynamic Color Matching</h3>
             <p>We automatically match colors to major paint brands like Liquitex, Golden, and Winsor & Newton. No more guessing which acrylics to buy.</p>
           </div>
           
           <div className="bento-item reveal">
-            <span className="bento-icon">📐</span>
+            <span className="bento-icon">—</span>
             <h3>Vector Output</h3>
             <p>Scale your canvas to any size without losing quality.</p>
           </div>
           
           <div className="bento-item reveal">
-            <span className="bento-icon">💾</span>
+            <span className="bento-icon">—</span>
             <h3>Cloud Save</h3>
             <p>Start on your phone, finish adjusting on your desktop.</p>
           </div>
@@ -192,7 +193,7 @@ const LandingPage: React.FC = () => {
             onClick={() => setSelectedLevel(1)}
           >
             <h3>Beginner</h3>
-            <div style={{color: '#a5b4fc', marginBottom: '16px', fontWeight: 'bold'}}>Level 1</div>
+            <div style={{color: '#D4798A', marginBottom: '16px', fontWeight: 'bold'}}>Level 1</div>
             <ul className="card-features">
               <li>20-30 Colors</li>
               <li>Larger painting zones</li>
@@ -207,7 +208,7 @@ const LandingPage: React.FC = () => {
           >
             <div className="popular-badge">Recommended</div>
             <h3>Intermediate</h3>
-            <div style={{color: '#a5b4fc', marginBottom: '16px', fontWeight: 'bold'}}>Level 2</div>
+            <div style={{color: '#D4798A', marginBottom: '16px', fontWeight: 'bold'}}>Level 2</div>
             <ul className="card-features">
               <li>40-60 Colors</li>
               <li>Balanced detail</li>
@@ -222,7 +223,7 @@ const LandingPage: React.FC = () => {
             onClick={() => setSelectedLevel(3)}
           >
             <h3>Expert</h3>
-            <div style={{color: '#a5b4fc', marginBottom: '16px', fontWeight: 'bold'}}>Level 3</div>
+            <div style={{color: '#D4798A', marginBottom: '16px', fontWeight: 'bold'}}>Level 3</div>
             <ul className="card-features">
               <li>80+ Colors</li>
               <li>Photorealistic detail</li>
@@ -237,7 +238,7 @@ const LandingPage: React.FC = () => {
       <section className="cta-banner reveal">
         <h2>Ready to Create?</h2>
         <p style={{marginBottom: '32px', color: 'rgba(255,255,255,0.7)'}}>Click on the button below</p>
-        <button className="btn btn-primary" style={{margin: '0 auto'}}>
+        <button className="btn btn-primary" style={{margin: '0 auto'}} onClick={() => navigate('/create')}>
           Get Started for Free
         </button>
       </section>

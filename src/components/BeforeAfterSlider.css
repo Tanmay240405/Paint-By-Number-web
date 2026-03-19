@@ -1,0 +1,132 @@
+/* ═══════════════════════════════════════════════
+   BEFORE/AFTER SLIDER
+   ═══════════════════════════════════════════════ */
+
+.ba-slider {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: ew-resize;
+  user-select: none;
+  -webkit-user-select: none;
+  box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  aspect-ratio: 16 / 10;
+}
+
+.ba-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.ba-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+/* Divider line + handle */
+.ba-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ba-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+.ba-handle {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  color: #333;
+  pointer-events: auto;
+  cursor: ew-resize;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ba-handle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.35);
+}
+
+.ba-handle svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Labels */
+.ba-label {
+  position: absolute;
+  bottom: 16px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.ba-label-left {
+  left: 16px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.ba-label-right {
+  right: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ba-slider {
+    border-radius: 14px;
+  }
+
+  .ba-handle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ba-handle svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .ba-label {
+    font-size: 0.65rem;
+    padding: 4px 12px;
+  }
+}

@@ -1,14 +1,14 @@
 :root {
-  /* Updated Background to "Midnight" */
-  --bg-dark: #e8bb78; 
+  /* Soft Atelier Color Scheme */
+  --bg-dark: #1E1E2A;
   
-  --primary: #667eea;
-  --secondary: #764ba2;
-  --accent: #f093fb;
-  --bg-card: rgba(255, 255, 255, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  --text-main: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.4);
+  --primary: #D4798A;
+  --secondary: #E8C4A0;
+  --accent: #D4798A;
+  --bg-card: rgba(199, 155, 167, 0.08);
+  --glass-border: rgba(199, 155, 167, 0.15);
+  --text-main: #F0E8E4;
+  --text-muted: rgba(240, 232, 228, 0.5);
 }
 
 /* ... the rest of your CSS remains exactly the same ... */
@@ -39,7 +39,7 @@ body {
   /* Changed 600px to 350px for "less area" */
   background: radial-gradient(
     180px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(102, 126, 234, 0.15),
+    rgba(212, 121, 138, 0.12),
     transparent 80%
   );
   transition: opacity 0.3s ease;
@@ -105,7 +105,7 @@ body::after {
   top: 20px;
   margin: 0 20px;
   border-radius: 16px;
-  background: rgba(232, 187, 120, 0.6);
+  background: rgba(30, 30, 42, 0.75);
   backdrop-filter: blur(20px);
   z-index: 100;
   border: 1px solid var(--glass-border);
@@ -116,7 +116,7 @@ body::after {
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  background: linear-gradient(135deg, #fff 30%, var(--primary) 100%);
+  background: linear-gradient(135deg, var(--text-main) 30%, var(--primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -162,7 +162,7 @@ body::after {
   font-size: 0.8rem;
   font-weight: 600;
   margin-bottom: 32px;
-  color: #a5b4fc;
+  color: var(--primary);
   box-shadow: 0 0 20px rgba(102, 126, 234, 0.1);
 }
 
@@ -179,7 +179,7 @@ body::after {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+  background: linear-gradient(135deg, #D4798A 0%, #E8C4A0 50%, #D4798A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
@@ -231,9 +231,9 @@ body::after {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(30, 30, 42, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  color: #F0E8E4;
   backdrop-filter: blur(10px);
 }
 
@@ -353,18 +353,18 @@ body::after {
 }
 
 .bento-item:hover {
-  border-color: rgba(102, 126, 234, 0.3);
+  border-color: rgba(212, 121, 138, 0.3);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
 .bento-item.large {
   grid-column: span 2;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(212, 121, 138, 0.12) 0%, rgba(199, 155, 167, 0.02) 100%);
 }
 
 .bento-item.tall {
   grid-row: span 2;
-  background: linear-gradient(180deg, rgba(118, 75, 162, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+  background: linear-gradient(180deg, rgba(232, 196, 160, 0.1) 0%, rgba(199, 155, 167, 0.02) 100%);
 }
 
 .bento-icon {
@@ -408,12 +408,12 @@ body::after {
 .card:hover {
   transform: translateY(-12px) scale(1.02);
   border-color: var(--primary);
-  box-shadow: 0 30px 60px -10px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 30px 60px -10px rgba(212, 121, 138, 0.12);
 }
 
 .card.popular {
   border: 1px solid var(--primary);
-  background: linear-gradient(180deg, rgba(153, 153, 153, 0.1) 0%, rgba(227, 227, 227, 0) 100%);
+  background: linear-gradient(180deg, rgba(212, 121, 138, 0.1) 0%, rgba(199, 155, 167, 0) 100%);
 }
 
 .popular-badge {
@@ -428,7 +428,7 @@ body::after {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 10px 20px rgba(212, 121, 138, 0.3);
 }
 
 .card-features li {
@@ -448,7 +448,7 @@ body::after {
 /* CTA Footer */
 .cta-banner {
   margin: 100px 20px;
-  background: radial-gradient(circle at center, #e6c28b 0%, #e3ac5a 100%);
+  background: radial-gradient(circle at center, #2A2235 0%, #1E1E2A 100%);
   border: 1px solid var(--glass-border);
   border-radius: 32px;
   padding: 100px 40px;
