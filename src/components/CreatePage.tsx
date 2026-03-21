@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { generatePaintByNumbers, PBNOptions } from '../services/paintByNumbersService';
 import { usePBNResult } from '../context/PBNContext';
@@ -18,6 +18,38 @@ const CreatePage: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Smooth trailing spotlight effect (same as landing page)
+  useEffect(() => {
+    let mouseX = 0;
+    let mouseY = 0;
+    let spotlightX = 0;
+    let spotlightY = 0;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    const animateSpotlight = () => {
+      const speed = 0.1;
+      spotlightX += (mouseX - spotlightX) * speed;
+      spotlightY += (mouseY - spotlightY) * speed;
+
+      document.documentElement.style.setProperty('--mouse-x', `${spotlightX}px`);
+      document.documentElement.style.setProperty('--mouse-y', `${spotlightY}px`);
+
+      requestAnimationFrame(animateSpotlight);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    const animationId = requestAnimationFrame(animateSpotlight);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
 
   const handleFileSelect = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) return;
@@ -82,6 +114,9 @@ const CreatePage: React.FC = () => {
 
   return (
     <div className="create-container">
+      {/* Global Spotlight (mouse glow) */}
+      <div className="create-spotlight" />
+
       {/* Background Effects */}
       <div className="create-bg-glow create-bg-glow-1" />
       <div className="create-bg-glow create-bg-glow-2" />
