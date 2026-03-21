@@ -254,16 +254,16 @@ const LandingPage: React.FC = () => {
           <div>
             <h4 style={{marginBottom: '20px'}}>Product</h4>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Features</a>
-              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Showcase</a>
-              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Pricing</a>
+              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Features</span>
+              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Showcase</span>
+              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Pricing</span>
             </div>
           </div>
           <div>
             <h4 style={{marginBottom: '20px'}}>Legal</h4>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Privacy Policy</a>
-              <a href="#" style={{color: 'rgba(255,255,255,0.6)', textDecoration: 'none'}}>Terms of Service</a>
+              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Privacy Policy</span>
+              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Terms of Service</span>
             </div>
           </div>
         </div>

@@ -161,6 +161,7 @@ function kMeansClustering(
 
 // ─── Simple Box Blur (used as fast bilateral approximation) ─────────
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function boxBlur(
   data: Uint8ClampedArray,
   w: number,
