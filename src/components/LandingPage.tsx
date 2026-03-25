@@ -247,27 +247,27 @@ const LandingPage: React.FC = () => {
         <div className="footer-content">
           <div>
             <div className="logo" style={{marginBottom: '20px', display: 'inline-block'}}>PaintByNumbers.AI</div>
-            <p style={{color: 'rgba(255,255,255,0.5)', maxWidth: '300px'}}>
+            <p style={{color: 'black', maxWidth: '300px'}}>
               Making art accessible to everyone through the power of artificial intelligence.
             </p>
           </div>
           <div>
             <h4 style={{marginBottom: '20px'}}>Product</h4>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Features</span>
-              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Showcase</span>
-              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Pricing</span>
+              <span style={{color: 'black', cursor: 'pointer'}}>Features</span>
+              <span style={{color: 'black', cursor: 'pointer'}}>Showcase</span>
+              <span style={{color: 'black', cursor: 'pointer'}}>Pricing</span>
             </div>
           </div>
           <div>
             <h4 style={{marginBottom: '20px'}}>Legal</h4>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Privacy Policy</span>
-              <span style={{color: 'rgba(255,255,255,0.6)', cursor: 'pointer'}}>Terms of Service</span>
+              <span style={{color: 'black', cursor: 'pointer'}}>Privacy Policy</span>
+              <span style={{color: 'black', cursor: 'pointer'}}>Terms of Service</span>
             </div>
           </div>
         </div>
-        <div style={{textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontSize: '0.9rem'}}>
+        <div style={{textAlign: 'center', color: 'black', fontSize: '0.9rem'}}>
           © 2026 Paint By Numbers AI.
         </div>
       </footer>
