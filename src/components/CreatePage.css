@@ -4,8 +4,9 @@
 
 .create-container {
   min-height: 100vh;
-  background: #1E1E2A;
-  color: #ffffff;
+  background: #FDFBF7;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  color: #1E1E2A;
   position: relative;
   overflow-x: hidden;
 }
@@ -72,16 +73,16 @@
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  background: linear-gradient(135deg, var(--text-main, #F0E8E4) 30%, #D4798A 100%);
+  background: linear-gradient(135deg, var(--text-main, #1E1E2A) 30%, #D4798A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   cursor: pointer;
 }
 
 .create-nav-back {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  background: rgba(30, 30, 42, 0.06);
+  border: 1px solid rgba(30, 30, 42, 0.1);
+  color: rgba(30, 30, 42, 0.7);
   padding: 10px 20px;
   border-radius: 12px;
   cursor: pointer;
@@ -90,8 +91,8 @@
 }
 
 .create-nav-back:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: rgba(30, 30, 42, 0.12);
+  color: #1E1E2A;
 }
 
 /* Content */
@@ -131,7 +132,7 @@
 
 .create-header p {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(30, 30, 42, 0.5);
 }
 
 /* Sections */
@@ -160,13 +161,13 @@
 
 /* Dropzone */
 .create-dropzone {
-  border: 2px dashed rgba(255, 255, 255, 0.12);
+  border: 2px dashed rgba(30, 30, 42, 0.12);
   border-radius: 20px;
   padding: 60px 20px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(30, 30, 42, 0.02);
   position: relative;
   overflow: hidden;
 }
@@ -204,19 +205,19 @@
 .create-dropzone-text {
   font-size: 1.1rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(30, 30, 42, 0.8);
 }
 
 .create-dropzone-sub {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(30, 30, 42, 0.4);
 }
 
 .create-dropzone-formats {
   margin-top: 12px;
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.05);
+  color: rgba(30, 30, 42, 0.5);
+  background: rgba(30, 30, 42, 0.05);
   padding: 4px 14px;
   border-radius: 20px;
 }
@@ -237,7 +238,7 @@
 .create-preview-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(253, 251, 247, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -251,12 +252,13 @@
 }
 
 .create-preview-overlay span {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(212, 121, 138, 0.15);
   padding: 10px 24px;
   border-radius: 12px;
   font-weight: 600;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(212, 121, 138, 0.3);
+  color: #1E1E2A;
 }
 
 /* Difficulty Cards */
@@ -267,8 +269,8 @@
 }
 
 .create-difficulty-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(30, 30, 42, 0.03);
+  border: 1px solid rgba(30, 30, 42, 0.08);
   border-radius: 20px;
   padding: 28px 20px;
   text-align: center;
@@ -278,8 +280,8 @@
 }
 
 .create-difficulty-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(30, 30, 42, 0.06);
+  border-color: rgba(30, 30, 42, 0.15);
   transform: translateY(-4px);
 }
 
@@ -317,7 +319,7 @@
 
 .create-difficulty-desc {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(30, 30, 42, 0.45);
   line-height: 1.5;
   margin-bottom: 12px;
 }
@@ -330,8 +332,8 @@
 
 /* Slider */
 .create-slider-wrap {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(30, 30, 42, 0.03);
+  border: 1px solid rgba(30, 30, 42, 0.08);
   border-radius: 20px;
   padding: 36px 32px 20px;
   text-align: center;
@@ -352,7 +354,7 @@
   width: 100%;
   height: 6px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(30, 30, 42, 0.1);
   outline: none;
   cursor: pointer;
 }
@@ -387,7 +389,7 @@
   justify-content: space-between;
   margin-top: 12px;
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(30, 30, 42, 0.4);
 }
 
 /* Generate Button */
@@ -457,7 +459,7 @@
 .create-processing-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(253, 251, 247, 0.85);
   backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
@@ -475,8 +477,8 @@
   text-align: center;
   max-width: 420px;
   padding: 48px 40px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(30, 30, 42, 0.04);
+  border: 1px solid rgba(30, 30, 42, 0.08);
   border-radius: 28px;
   backdrop-filter: blur(20px);
 }
@@ -491,7 +493,7 @@
 .create-spinner-ring {
   position: absolute;
   inset: 0;
-  border: 3px solid rgba(255, 255, 255, 0.08);
+  border: 3px solid rgba(30, 30, 42, 0.08);
   border-top-color: #D4798A;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -521,7 +523,7 @@
 }
 
 .create-processing-stage {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(30, 30, 42, 0.6);
   font-size: 0.95rem;
   margin-bottom: 24px;
 }
@@ -529,7 +531,7 @@
 .create-progress-bar {
   width: 100%;
   height: 6px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(30, 30, 42, 0.08);
   border-radius: 3px;
   overflow: hidden;
   margin-bottom: 24px;
@@ -544,7 +546,7 @@
 
 .create-processing-tip {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(30, 30, 42, 0.4);
   line-height: 1.5;
 }
 
