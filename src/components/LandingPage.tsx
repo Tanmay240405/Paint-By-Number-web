@@ -121,21 +121,27 @@ const LandingPage: React.FC = () => {
         <div className="steps-grid">
           <div className="step-card reveal">
             <div className="step-number">01</div>
-            <div className="step-icon">01</div>
+            <div className="step-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </div>
             <h3>Upload Photo</h3>
-            <p>Choose any photo from your gallery. Our AI automatically optimizes contrast and color balance.</p>
+            <p>Choose any photo from your gallery. Drag & drop or click to upload — PNG, JPG, and WEBP supported.</p>
           </div>
           <div className="step-card reveal" style={{ transitionDelay: '0.1s' }}>
             <div className="step-number">02</div>
-            <div className="step-icon">02</div>
+            <div className="step-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="15" r="2"></circle><circle cx="7" cy="14" r="3"></circle><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"></path></svg>
+            </div>
             <h3>Customize</h3>
-            <p>Select your difficulty level and palette size. Watch the preview update in real-time.</p>
+            <p>Pick your difficulty level and choose between 8 to 20 colors for your palette.</p>
           </div>
           <div className="step-card reveal" style={{ transitionDelay: '0.2s' }}>
             <div className="step-number">03</div>
-            <div className="step-icon">03</div>
-            <h3>Paint & Enjoy</h3>
-            <p>Download your numbered guide and palette sheet. Print it out and start painting!</p>
+            <div className="step-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </div>
+            <h3>Download & Paint</h3>
+            <p>Download your numbered template, color palette, and reference image. Print it out and start painting!</p>
           </div>
         </div>
       </section>
@@ -144,38 +150,48 @@ const LandingPage: React.FC = () => {
       <section id="features" className="section">
         <div className="section-header reveal">
           <h2>Our Features</h2>
-          <p>Made for everyone, no matter you are a professional artist or a beginner</p>
+          <p>Made for everyone, whether you're a professional artist or a beginner</p>
         </div>
         
         <div className="bento-grid">
           <div className="bento-item large reveal">
-            <span className="bento-icon">—</span>
-            <h3>Smart Segmentation AI</h3>
-            <p>Our proprietary algorithm understands object boundaries better than any other tool, ensuring your painting looks like the original photo, not a jagged mess.</p>
+            <span className="bento-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5L14 12H10l0-2.5C8.8 8.8 8 7.5 8 6a4 4 0 0 1 4-4z"></path><rect x="9" y="12" width="6" height="3" rx="1"></rect><path d="M10 15v2a2 2 0 1 0 4 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+            </span>
+            <h3>AI Color Clustering</h3>
+            <p>Advanced KMeans clustering in LAB color space with edge-preserving smoothing to create clean, paintable regions that stay true to your original photo.</p>
           </div>
           
           <div className="bento-item reveal">
-            <span className="bento-icon">—</span>
-            <h3>Instant Processing</h3>
-            <p>Generate high-res vector PDFs in under 5 seconds.</p>
+            <span className="bento-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </span>
+            <h3>In-Browser Processing</h3>
+            <p>Everything runs locally in your browser — no uploads, no servers, complete privacy.</p>
           </div>
           
           <div className="bento-item tall reveal">
-            <span className="bento-icon">—</span>
-            <h3>Dynamic Color Matching</h3>
-            <p>We automatically match colors to major paint brands like Liquitex, Golden, and Winsor & Newton. No more guessing which acrylics to buy.</p>
+            <span className="bento-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="15" r="2"></circle><circle cx="7" cy="14" r="3"></circle><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"></path></svg>
+            </span>
+            <h3>Smart Color Palette</h3>
+            <p>Automatically extracts the optimal color palette from your image. Choose between 8 to 20 colors and get a detailed palette sheet with hex codes.</p>
           </div>
           
           <div className="bento-item reveal">
-            <span className="bento-icon">—</span>
-            <h3>Vector Output</h3>
-            <p>Scale your canvas to any size without losing quality.</p>
+            <span className="bento-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </span>
+            <h3>Instant Downloads</h3>
+            <p>Download your numbered template, palette, and colored reference as PNG images.</p>
           </div>
           
           <div className="bento-item reveal">
-            <span className="bento-icon">—</span>
-            <h3>Cloud Save</h3>
-            <p>Start on your phone, finish adjusting on your desktop.</p>
+            <span className="bento-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="12" y2="14"></line></svg>
+            </span>
+            <h3>Numbered Regions</h3>
+            <p>Each region gets a clear number label so you know exactly which color goes where.</p>
           </div>
         </div>
       </section>
@@ -192,13 +208,13 @@ const LandingPage: React.FC = () => {
             className={`card ${selectedLevel === 1 ? 'selected' : ''}`}
             onClick={() => setSelectedLevel(1)}
           >
-            <h3>Beginner</h3>
+            <h3>Easy</h3>
             <div style={{color: '#D4798A', marginBottom: '16px', fontWeight: 'bold'}}>Level 1</div>
             <ul className="card-features">
-              <li>20-30 Colors</li>
-              <li>Larger painting zones</li>
-              <li>Estimated: 2-3 Hours</li>
-              <li>Printable PDF Guide</li>
+              <li>8–10 Colors</li>
+              <li>Fewer, larger regions</li>
+              <li>Relaxing & meditative</li>
+              <li>Great for beginners</li>
             </ul>
           </div>
 
@@ -207,14 +223,13 @@ const LandingPage: React.FC = () => {
             onClick={() => setSelectedLevel(2)}
           >
             <div className="popular-badge">Recommended</div>
-            <h3>Intermediate</h3>
+            <h3>Medium</h3>
             <div style={{color: '#D4798A', marginBottom: '16px', fontWeight: 'bold'}}>Level 2</div>
             <ul className="card-features">
-              <li>40-60 Colors</li>
-              <li>Balanced detail</li>
-              <li>Estimated: 5-8 Hours</li>
-              <li>Printable PDF Guide</li>
-              <li>Color mixing guide</li>
+              <li>12–15 Colors</li>
+              <li>Balanced detail & regions</li>
+              <li>Best for most photos</li>
+              <li>Downloadable PNG files</li>
             </ul>
           </div>
 
@@ -222,14 +237,13 @@ const LandingPage: React.FC = () => {
             className={`card ${selectedLevel === 3 ? 'selected' : ''}`}
             onClick={() => setSelectedLevel(3)}
           >
-            <h3>Expert</h3>
+            <h3>Hard</h3>
             <div style={{color: '#D4798A', marginBottom: '16px', fontWeight: 'bold'}}>Level 3</div>
             <ul className="card-features">
-              <li>80+ Colors</li>
-              <li>Photorealistic detail</li>
-              <li>Estimated: 15+ Hours</li>
-              <li>Vector SVG Download</li>
-              <li>Commercial License</li>
+              <li>16–20 Colors</li>
+              <li>Maximum detail & precision</li>
+              <li>Photorealistic results</li>
+              <li>For experienced painters</li>
             </ul>
           </div>
         </div>
