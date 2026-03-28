@@ -339,11 +339,14 @@ body::after {
 }
 
 .step-icon {
-  font-size: 2.5rem;
   margin-bottom: 24px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+}
+
+.step-icon svg {
+  stroke: var(--primary);
 }
 
 /* Bento Grid Features */
@@ -382,9 +385,14 @@ body::after {
 }
 
 .bento-icon {
-  font-size: 2rem;
   margin-bottom: 20px;
-  display: block;
+  display: flex;
+  align-items: center;
+  color: var(--primary);
+}
+
+.bento-icon svg {
+  stroke: var(--primary);
 }
 
 .bento-item h3 {
