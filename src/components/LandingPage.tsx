@@ -68,7 +68,7 @@ const LandingPage: React.FC = () => {
       <div className="global-spotlight" />
 
       <nav className="navbar">
-        <div className="logo">PaintByNumbers.AI</div>
+        <div className="logo">PaintByNumbers</div>
         <div className="nav-links">
           <a href="#how-it-works">How It Works</a>
           <a href="#features">Features</a>
