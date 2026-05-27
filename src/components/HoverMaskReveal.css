@@ -1,0 +1,72 @@
+/* ═══════════════════════════════════════════════
+   HOVER MASK REVEAL — Full-screen Interactive Reveal
+   ═══════════════════════════════════════════════ */
+
+.hover-mask-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  overflow: hidden;
+}
+
+.hover-mask-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hint badge */
+.hover-mask-hint {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(30, 30, 42, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.5s ease 1s;
+  animation: hintPulse 3s ease-in-out infinite;
+  z-index: 5;
+}
+
+.hover-mask-container:hover .hover-mask-hint {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes hintPulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.03);
+    box-shadow: 0 6px 28px rgba(212, 121, 138, 0.2);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hover-mask-hint {
+    font-size: 0.65rem;
+    padding: 6px 14px;
+    bottom: 70px;
+  }
+}
