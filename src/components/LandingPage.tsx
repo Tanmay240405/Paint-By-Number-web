@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import HoverMaskReveal from "./HoverMaskReveal";
+import LiquidEther from "./LiquidEther";
+import HTMLCircularGallery from "./HTMLCircularGallery";
 import "./LandingPage.css";
 
 const LandingPage: React.FC = () => {
@@ -101,6 +103,17 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="container">
+      {/* Fixed Login/Signup Button */}
+      <div style={{ position: 'fixed', top: '30px', right: '40px', zIndex: 1000 }}>
+        <button 
+          className="btn btn-secondary" 
+          onClick={() => navigate('/login')} 
+          style={{ padding: '12px 24px', fontSize: '0.95rem', fontWeight: 600, boxShadow: '0 10px 30px -10px rgba(0,0,0,0.1)', borderRadius: '50px' }}
+        >
+          Login / Sign Up
+        </button>
+      </div>
+
       {/* Scrollable Hero Wrapper */}
       <div className="hero-scroll-wrapper" style={{ height: '180vh', position: 'relative' }}>
         <section className="hero-sticky" style={{
@@ -162,28 +175,62 @@ const LandingPage: React.FC = () => {
 
           <div className="steps-grid">
             <div className="step-card reveal">
-              <div className="step-number">01</div>
-              <div className="step-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <div style={{ position: 'absolute', inset: -20, zIndex: 0, opacity: 0.6, filter: 'blur(10px)' }}>
+                <LiquidEther 
+                  colors={['#F5E6DD', '#EAD5DA']} 
+                  resolution={0.3} 
+                  isViscous={true} 
+                  viscous={80} 
+                  mouseForce={5} 
+                  autoIntensity={0.5}
+                />
               </div>
-              <h3>Upload Photo</h3>
-              <p>Choose any photo from your gallery. Drag & drop or click to upload — PNG, JPG, and WEBP supported.</p>
+              <div style={{ position: 'relative', zIndex: 1, pointerEvents: 'none' }}>
+                <div className="step-number">01</div>
+                <div className="step-icon">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                </div>
+                <h3>Upload Photo</h3>
+                <p>Choose any photo from your gallery. Drag & drop or click to upload — PNG, JPG, and WEBP supported.</p>
+              </div>
             </div>
             <div className="step-card reveal" style={{ transitionDelay: '0.1s' }}>
-              <div className="step-number">02</div>
-              <div className="step-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="15" r="2"></circle><circle cx="7" cy="14" r="3"></circle><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"></path></svg>
+              <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.3, mixBlendMode: 'multiply' }}>
+                <LiquidEther 
+                  colors={['#E8C4A0', '#D4798A']} 
+                  resolution={0.3} 
+                  isViscous={true} 
+                  viscous={40} 
+                  mouseForce={15} 
+                />
               </div>
-              <h3>Customize</h3>
-              <p>Pick your difficulty level and choose between 8 to 20 colors for your palette.</p>
+              <div style={{ position: 'relative', zIndex: 1, pointerEvents: 'none' }}>
+                <div className="step-number">02</div>
+                <div className="step-icon">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="15" r="2"></circle><circle cx="7" cy="14" r="3"></circle><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"></path></svg>
+                </div>
+                <h3>Customize</h3>
+                <p>Pick your difficulty level and choose between 8 to 20 colors for your palette.</p>
+              </div>
             </div>
             <div className="step-card reveal" style={{ transitionDelay: '0.2s' }}>
-              <div className="step-number">03</div>
-              <div className="step-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.3, mixBlendMode: 'multiply' }}>
+                <LiquidEther 
+                  colors={['#E8C4A0', '#D4798A']} 
+                  resolution={0.3} 
+                  isViscous={true} 
+                  viscous={40} 
+                  mouseForce={15} 
+                />
               </div>
-              <h3>Download & Paint</h3>
-              <p>Download your numbered template, color palette, and reference image. Print it out and start painting!</p>
+              <div style={{ position: 'relative', zIndex: 1, pointerEvents: 'none' }}>
+                <div className="step-number">03</div>
+                <div className="step-icon">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </div>
+                <h3>Download & Paint</h3>
+                <p>Download your numbered template, color palette, and reference image. Print it out and start painting!</p>
+              </div>
             </div>
           </div>
         </section>
@@ -195,46 +242,48 @@ const LandingPage: React.FC = () => {
             <p>Made for everyone, whether you're a professional artist or a beginner</p>
           </div>
 
-          <div className="bento-grid">
-            <div className="bento-item large reveal">
-              <span className="bento-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5L14 12H10l0-2.5C8.8 8.8 8 7.5 8 6a4 4 0 0 1 4-4z"></path><rect x="9" y="12" width="6" height="3" rx="1"></rect><path d="M10 15v2a2 2 0 1 0 4 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
-              </span>
-              <h3>AI Color Clustering</h3>
-              <p>Advanced KMeans clustering in LAB color space with edge-preserving smoothing to create clean, paintable regions that stay true to your original photo.</p>
-            </div>
+          <div className="reveal">
+            <HTMLCircularGallery bend={-3} startIndex={2}>
+              <div className="bento-item">
+                <span className="bento-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5L14 12H10l0-2.5C8.8 8.8 8 7.5 8 6a4 4 0 0 1 4-4z"></path><rect x="9" y="12" width="6" height="3" rx="1"></rect><path d="M10 15v2a2 2 0 1 0 4 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+                </span>
+                <h3>AI Color Clustering</h3>
+                <p>Advanced KMeans clustering in LAB color space with edge-preserving smoothing to create clean, paintable regions that stay true to your original photo.</p>
+              </div>
 
-            <div className="bento-item reveal">
-              <span className="bento-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              </span>
-              <h3>In-Browser Processing</h3>
-              <p>Everything runs locally in your browser — no uploads, no servers, complete privacy.</p>
-            </div>
+              <div className="bento-item">
+                <span className="bento-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </span>
+                <h3>In-Browser Processing</h3>
+                <p>Everything runs locally in your browser — no uploads, no servers, complete privacy.</p>
+              </div>
 
-            <div className="bento-item tall reveal">
-              <span className="bento-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="15" r="2"></circle><circle cx="7" cy="14" r="3"></circle><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"></path></svg>
-              </span>
-              <h3>Smart Color Palette</h3>
-              <p>Automatically extracts the optimal color palette from your image. Choose between 8 to 20 colors and get a detailed palette sheet with hex codes.</p>
-            </div>
+              <div className="bento-item">
+                <span className="bento-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="15" r="2"></circle><circle cx="7" cy="14" r="3"></circle><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"></path></svg>
+                </span>
+                <h3>Smart Color Palette</h3>
+                <p>Automatically extracts the optimal color palette from your image. Choose between 8 to 20 colors and get a detailed palette sheet with hex codes.</p>
+              </div>
 
-            <div className="bento-item reveal">
-              <span className="bento-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              </span>
-              <h3>Instant Downloads</h3>
-              <p>Download your numbered template, palette, and colored reference as PNG images.</p>
-            </div>
+              <div className="bento-item">
+                <span className="bento-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </span>
+                <h3>Instant Downloads</h3>
+                <p>Download your numbered template, palette, and colored reference as PNG images.</p>
+              </div>
 
-            <div className="bento-item reveal">
-              <span className="bento-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="12" y2="14"></line></svg>
-              </span>
-              <h3>Numbered Regions</h3>
-              <p>Each region gets a clear number label so you know exactly which color goes where.</p>
-            </div>
+              <div className="bento-item">
+                <span className="bento-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="12" y2="14"></line></svg>
+                </span>
+                <h3>Numbered Regions</h3>
+                <p>Each region gets a clear number label so you know exactly which color goes where.</p>
+              </div>
+            </HTMLCircularGallery>
           </div>
         </section>
 
