@@ -41,6 +41,7 @@ const HTMLCircularGallery: React.FC<HTMLCircularGalleryProps> = ({ bend = 3, sta
       if (container) container.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isDragging = useRef(false);
@@ -161,6 +162,7 @@ const GalleryItem: React.FC<GalleryItemProps> = ({ children, containerRef, bend,
     const rotZDeg = rotZ * (180 / Math.PI);
 
     setTransform(`translateY(${y}px) rotateZ(${rotZDeg}deg)`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollProgress, bend, children]);
 
   return (
