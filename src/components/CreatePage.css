@@ -568,3 +568,30 @@
     padding: 16px 16px 60px;
   }
 }
+
+/* Reused Buttons from LandingPage */
+.btn {
+  padding: 16px 36px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  outline: none;
+}
+
+.btn-secondary {
+  background: rgba(30, 30, 42, 0.05);
+  border: 1px solid rgba(30, 30, 42, 0.1) !important;
+  color: #1E1E2A;
+  backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: rgba(30, 30, 42, 0.1);
+  border-color: rgba(30, 30, 42, 0.2) !important;
+}

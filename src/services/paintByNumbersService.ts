@@ -391,16 +391,14 @@ function mergeSmallRegions(
 function findContourPixels(
   labels: Int32Array, w: number, h: number
 ): Uint8Array {
-  // A pixel is a contour pixel if any of its 4-neighbors has a different label
+  // A pixel is a contour pixel if right or bottom neighbor has a different label
   const contour = new Uint8Array(w * h);
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
       const idx = y * w + x;
       const lbl = labels[idx];
       if (
-        (x > 0 && labels[idx - 1] !== lbl) ||
         (x < w - 1 && labels[idx + 1] !== lbl) ||
-        (y > 0 && labels[(y - 1) * w + x] !== lbl) ||
         (y < h - 1 && labels[(y + 1) * w + x] !== lbl)
       ) {
         contour[idx] = 1;
@@ -492,7 +490,87 @@ export interface PBNResult {
   palette: { index: number; hex: string; rgb: [number, number, number] }[];
 }
 
-// ─── Main Generator Function ────────────────────────────────────────
+// ─── Main Generator Functions ───────────────────────────────────────
+
+export async function generatePaintByNumbersML(
+  imageFile: File,
+  options: PBNOptions,
+  onProgress?: (stage: string, percent: number) => void
+): Promise<PBNResult> {
+  const { nColors, difficulty, targetWidth = 900 } = options;
+
+  onProgress?.('Uploading image to AI server...', 10);
+
+  const form = new FormData();
+  form.append('image', imageFile);
+  form.append('n_colors', String(nColors));
+  form.append('difficulty', String(difficulty));
+  form.append('target_width', String(targetWidth));
+
+  // Progress animation simulation while the ML server is processing
+  let progressVal = 10;
+  const interval = setInterval(() => {
+    if (progressVal < 90) {
+      progressVal += 5;
+      let stage = 'Running AI Segmentation (SAM)...';
+      if (progressVal > 35 && progressVal < 65) {
+        stage = 'Analyzing semantic regions...';
+      } else if (progressVal >= 65) {
+        stage = 'Drawing layout & number positioning...';
+      }
+      onProgress?.(stage, progressVal);
+    }
+  }, 1200);
+
+  try {
+    const backendUrl = process.env.REACT_APP_ML_BACKEND_URL || 'http://localhost:8000';
+    const res = await fetch(`${backendUrl}/generate/ml`, {
+      method: 'POST',
+      body: form,
+    });
+
+    clearInterval(interval);
+
+    if (!res.ok) {
+      const errText = await res.text();
+      let msg = 'Failed to generate ML template';
+      try {
+        const errObj = JSON.parse(errText);
+        msg = errObj.detail || msg;
+      } catch (e) {
+        if (errText) msg = errText;
+      }
+      throw new Error(msg);
+    }
+
+    onProgress?.('Downloading outputs...', 92);
+    const data = await res.json();
+
+    onProgress?.('Rendering final masterpiece...', 98);
+
+    return {
+      templateDataUrl: `data:image/png;base64,${data.template}`,
+      referenceDataUrl: `data:image/png;base64,${data.reference}`,
+      paletteDataUrl: `data:image/png;base64,${data.palette}`,
+      originalDataUrl: `data:image/png;base64,${data.original}`,
+      palette: data.palette_data.map((p: any) => ({
+        index: p.index,
+        hex: p.hex,
+        rgb: p.rgb as [number, number, number],
+      })),
+      metrics: {
+        totalRegions: data.metrics.total_regions,
+        avgRegionSize: data.metrics.avg_region_size,
+        smallestRegion: data.metrics.smallest_region,
+        largestRegion: data.metrics.largest_region,
+      },
+    };
+  } catch (err) {
+    clearInterval(interval);
+    throw err;
+  }
+}
+
 
 export async function generatePaintByNumbers(
   imageFile: File,
@@ -674,9 +752,9 @@ function drawTemplate(
   const imgData = ctx.getImageData(0, 0, w, h);
   for (let i = 0; i < w * h; i++) {
     if (contour[i]) {
-      imgData.data[i * 4] = 140;
-      imgData.data[i * 4 + 1] = 140;
-      imgData.data[i * 4 + 2] = 140;
+      imgData.data[i * 4] = 190;
+      imgData.data[i * 4 + 1] = 190;
+      imgData.data[i * 4 + 2] = 190;
     }
   }
   ctx.putImageData(imgData, 0, 0);

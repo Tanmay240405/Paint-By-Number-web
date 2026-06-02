@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import HoverMaskReveal from "./HoverMaskReveal";
 import LiquidEther from "./LiquidEther";
 import HTMLCircularGallery from "./HTMLCircularGallery";
@@ -7,6 +8,7 @@ import "./LandingPage.css";
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [selectedLevel, setSelectedLevel] = useState<number>(2);
 
   const heroImageRef = useRef<HTMLDivElement>(null);
@@ -103,15 +105,39 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="container">
-      {/* Fixed Login/Signup Button */}
-      <div style={{ position: 'fixed', top: '30px', right: '40px', zIndex: 1000 }}>
-        <button 
-          className="btn btn-secondary" 
-          onClick={() => navigate('/login')} 
-          style={{ padding: '12px 24px', fontSize: '0.95rem', fontWeight: 600, boxShadow: '0 10px 30px -10px rgba(0,0,0,0.1)', borderRadius: '50px' }}
-        >
-          Login / Sign Up
-        </button>
+      {/* Fixed Auth Button */}
+      <div style={{ position: 'fixed', top: '30px', right: '40px', zIndex: 1000, display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {user ? (
+          <>
+            <span style={{
+              fontSize: '0.95rem',
+              fontWeight: 600,
+              color: 'var(--text-main, #1E1E2A)',
+              background: 'rgba(30, 30, 42, 0.05)',
+              padding: '10px 20px',
+              borderRadius: '50px',
+              border: '1px solid rgba(30, 30, 42, 0.08)',
+              backdropFilter: 'blur(10px)',
+            }}>
+              Hello, {user.displayName?.split(' ')[0] || user.email?.split('@')[0] || 'there'}
+            </span>
+            <button
+              className="btn btn-secondary"
+              onClick={async () => { await logout(); }}
+              style={{ padding: '10px 20px', fontSize: '0.9rem', fontWeight: 600, borderRadius: '50px' }}
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            className="btn btn-secondary"
+            onClick={() => navigate('/login')}
+            style={{ padding: '12px 24px', fontSize: '0.95rem', fontWeight: 600, boxShadow: '0 10px 30px -10px rgba(0,0,0,0.1)', borderRadius: '50px' }}
+          >
+            Login / Sign Up
+          </button>
+        )}
       </div>
 
       {/* Scrollable Hero Wrapper */}
@@ -176,12 +202,12 @@ const LandingPage: React.FC = () => {
           <div className="steps-grid">
             <div className="step-card reveal">
               <div style={{ position: 'absolute', inset: -20, zIndex: 0, opacity: 0.6, filter: 'blur(10px)' }}>
-                <LiquidEther 
-                  colors={['#F5E6DD', '#EAD5DA']} 
-                  resolution={0.3} 
-                  isViscous={true} 
-                  viscous={80} 
-                  mouseForce={5} 
+                <LiquidEther
+                  colors={['#F5E6DD', '#EAD5DA']}
+                  resolution={0.3}
+                  isViscous={true}
+                  viscous={80}
+                  mouseForce={5}
                   autoIntensity={0.5}
                 />
               </div>
@@ -196,12 +222,12 @@ const LandingPage: React.FC = () => {
             </div>
             <div className="step-card reveal" style={{ transitionDelay: '0.1s' }}>
               <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.3, mixBlendMode: 'multiply' }}>
-                <LiquidEther 
-                  colors={['#E8C4A0', '#D4798A']} 
-                  resolution={0.3} 
-                  isViscous={true} 
-                  viscous={40} 
-                  mouseForce={15} 
+                <LiquidEther
+                  colors={['#E8C4A0', '#D4798A']}
+                  resolution={0.3}
+                  isViscous={true}
+                  viscous={40}
+                  mouseForce={15}
                 />
               </div>
               <div style={{ position: 'relative', zIndex: 1, pointerEvents: 'none' }}>
@@ -215,12 +241,12 @@ const LandingPage: React.FC = () => {
             </div>
             <div className="step-card reveal" style={{ transitionDelay: '0.2s' }}>
               <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.3, mixBlendMode: 'multiply' }}>
-                <LiquidEther 
-                  colors={['#E8C4A0', '#D4798A']} 
-                  resolution={0.3} 
-                  isViscous={true} 
-                  viscous={40} 
-                  mouseForce={15} 
+                <LiquidEther
+                  colors={['#E8C4A0', '#D4798A']}
+                  resolution={0.3}
+                  isViscous={true}
+                  viscous={40}
+                  mouseForce={15}
                 />
               </div>
               <div style={{ position: 'relative', zIndex: 1, pointerEvents: 'none' }}>

@@ -1,13 +1,16 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { generatePaintByNumbers, PBNOptions } from '../services/paintByNumbersService';
+import { useAuth } from '../context/AuthContext';
+import { generatePaintByNumbers, generatePaintByNumbersML, PBNOptions } from '../services/paintByNumbersService';
 import { usePBNResult } from '../context/PBNContext';
 import './CreatePage.css';
 
 const CreatePage: React.FC = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const { setResult } = usePBNResult();
 
+  const [modelType, setModelType] = useState<'local' | 'ml'>('local');
   const [difficulty, setDifficulty] = useState<1 | 2 | 3>(2);
   const [nColors, setNColors] = useState(12);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -18,6 +21,12 @@ const CreatePage: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (modelType === 'ml' && nColors > 20) {
+      setNColors(20);
+    }
+  }, [modelType, nColors]);
 
   // Smooth trailing spotlight effect (same as landing page)
   useEffect(() => {
@@ -72,20 +81,36 @@ const CreatePage: React.FC = () => {
     setProgressStage('Initializing...');
 
     try {
-      const options: PBNOptions = { nColors, difficulty };
-      const result = await generatePaintByNumbers(
-        selectedFile,
-        options,
-        (stage, percent) => {
-          setProgressStage(stage);
-          setProgressPercent(percent);
-        }
-      );
+      const actualColors = nColors > 20 ? 30 : nColors;
+      const options: PBNOptions = { nColors: actualColors, difficulty };
+      
+      const result = modelType === 'ml'
+        ? await generatePaintByNumbersML(
+            selectedFile,
+            options,
+            (stage, percent) => {
+              setProgressStage(stage);
+              setProgressPercent(percent);
+            }
+          )
+        : await generatePaintByNumbers(
+            selectedFile,
+            options,
+            (stage, percent) => {
+              setProgressStage(stage);
+              setProgressPercent(percent);
+            }
+          );
+
       setResult(result);
       navigate('/results');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Generation failed:', err);
-      alert('Something went wrong during processing. Please try again.');
+      let errorMsg = 'Something went wrong during processing. Please try again.';
+      if (modelType === 'ml') {
+        errorMsg = `AI Generation failed: ${err.message || err}\n\nPlease ensure your local FastAPI backend is running at http://localhost:8000.\n\nQuick setup: run "uvicorn main:app --reload" inside your "ML Model" directory!`;
+      }
+      alert(errorMsg);
       setIsProcessing(false);
     }
   };
@@ -126,9 +151,24 @@ const CreatePage: React.FC = () => {
         <div className="create-nav-logo" onClick={() => navigate('/')}>
           PaintByNumbers.AI
         </div>
-        <button className="create-nav-back" onClick={() => navigate('/')}>
-          ← Back to Home
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button 
+            className="btn btn-secondary" 
+            onClick={() => navigate('/')}
+            style={{ padding: '10px 20px', fontSize: '0.9rem', fontWeight: 600, borderRadius: '50px' }}
+          >
+            ← Back to Home
+          </button>
+          {user && (
+            <button
+              className="btn btn-secondary"
+              onClick={async () => { await logout(); navigate('/'); }}
+              style={{ padding: '10px 20px', fontSize: '0.9rem', fontWeight: 600, borderRadius: '50px' }}
+            >
+              Logout
+            </button>
+          )}
+        </div>
       </nav>
 
       {/* Main Content */}
@@ -179,10 +219,41 @@ const CreatePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Difficulty Section */}
+        {/* Model Selection Section */}
         <div className="create-section">
           <h2 className="create-section-title">
             <span className="create-section-number">02</span>
+            Choose Generation Model
+          </h2>
+          <div className="create-difficulty-grid">
+            <div
+              className={`create-difficulty-card ${modelType === 'local' ? 'active' : ''}`}
+              onClick={() => setModelType('local')}
+            >
+              <h3>Standard Model (Local)</h3>
+              <p className="create-difficulty-desc">
+                Fast, runs directly in your browser. Perfect for instant offline results.
+              </p>
+              <span className="create-difficulty-detail">Local K-Means Algorithm</span>
+            </div>
+            <div
+              className={`create-difficulty-card ${modelType === 'ml' ? 'active' : ''} recommended`}
+              onClick={() => setModelType('ml')}
+            >
+              <div className="create-recommended-badge">Premium AI</div>
+              <h3>AI Segmentation (SAM)</h3>
+              <p className="create-difficulty-desc">
+                Meta's Segment Anything Model (SAM) recognizes semantic shapes and objects for professional-grade templates.
+              </p>
+              <span className="create-difficulty-detail">Requires Local FastAPI Server</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Difficulty Section */}
+        <div className="create-section">
+          <h2 className="create-section-title">
+            <span className="create-section-number">03</span>
             Select Difficulty
           </h2>
           <div className="create-difficulty-grid">
@@ -204,15 +275,15 @@ const CreatePage: React.FC = () => {
         {/* Color Count Section */}
         <div className="create-section">
           <h2 className="create-section-title">
-            <span className="create-section-number">03</span>
+            <span className="create-section-number">04</span>
             Number of Colors
           </h2>
           <div className="create-slider-wrap">
-            <div className="create-slider-value">{nColors}</div>
+            <div className="create-slider-value">{nColors > 20 ? '20+' : nColors}</div>
             <input
               type="range"
               min={8}
-              max={20}
+              max={modelType === 'local' ? 21 : 20}
               value={nColors}
               onChange={(e) => setNColors(Number(e.target.value))}
               className="create-slider"
@@ -220,7 +291,7 @@ const CreatePage: React.FC = () => {
             <div className="create-slider-labels">
               <span>8 (Minimal)</span>
               <span>14 (Balanced)</span>
-              <span>20 (Detailed)</span>
+              <span>{modelType === 'local' ? '20+' : '20 (Detailed)'}</span>
             </div>
           </div>
         </div>

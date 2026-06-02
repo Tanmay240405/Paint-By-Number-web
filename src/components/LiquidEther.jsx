@@ -1008,17 +1008,6 @@ export default function LiquidEther({
     container.style.position = container.style.position || 'relative';
     container.style.overflow = container.style.overflow || 'hidden';
 
-    const webgl = new WebGLManager({
-      $wrapper: container,
-      autoDemo,
-      autoSpeed,
-      autoIntensity,
-      takeoverDuration,
-      autoResumeDelay,
-      autoRampDuration
-    });
-    webglRef.current = webgl;
-
     const applyOptionsFromProps = () => {
       if (!webglRef.current) return;
       const sim = webglRef.current.output?.simulation;
@@ -1040,21 +1029,36 @@ export default function LiquidEther({
         sim.resize();
       }
     };
-    applyOptionsFromProps();
 
-    webgl.start();
-
-    // IntersectionObserver to pause rendering when not visible
+    // IntersectionObserver to pause rendering and lazy-initialize WebGL when visible
     const io = new IntersectionObserver(
       entries => {
         const entry = entries[0];
         const isVisible = entry.isIntersecting && entry.intersectionRatio > 0;
         isVisibleRef.current = isVisible;
-        if (!webglRef.current) return;
-        if (isVisible && !document.hidden) {
-          webglRef.current.start();
+        
+        if (isVisible) {
+          if (!webglRef.current) {
+            // Lazy-initialize WebGLManager on first viewport entrance!
+            const webgl = new WebGLManager({
+              $wrapper: container,
+              autoDemo,
+              autoSpeed,
+              autoIntensity,
+              takeoverDuration,
+              autoResumeDelay,
+              autoRampDuration
+            });
+            webglRef.current = webgl;
+            applyOptionsFromProps();
+          }
+          if (!document.hidden) {
+            webglRef.current.start();
+          }
         } else {
-          webglRef.current.pause();
+          if (webglRef.current) {
+            webglRef.current.pause();
+          }
         }
       },
       { threshold: [0, 0.01, 0.1] }

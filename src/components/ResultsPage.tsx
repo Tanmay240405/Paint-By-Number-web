@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { usePBNResult } from '../context/PBNContext';
 import './ResultsPage.css';
 
@@ -7,6 +8,7 @@ type TabKey = 'template' | 'palette' | 'reference' | 'original';
 
 const ResultsPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const { result } = usePBNResult();
   const [activeTab, setActiveTab] = useState<TabKey>('template');
 
@@ -63,9 +65,30 @@ const ResultsPage: React.FC = () => {
         <div className="results-nav-logo" onClick={() => navigate('/')}>
           PaintByNumbers.AI
         </div>
-        <button className="results-nav-back" onClick={() => navigate('/create')}>
-          ← Create Another
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {user && (
+            <span style={{
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              color: 'var(--text-main, #1E1E2A)',
+              opacity: 0.7,
+            }}>
+              Hello, {user.displayName?.split(' ')[0] || user.email?.split('@')[0] || 'there'}
+            </span>
+          )}
+          <button className="results-nav-back" onClick={() => navigate('/create')}>
+            ← Create Another
+          </button>
+          {user && (
+            <button
+              className="results-nav-back"
+              onClick={async () => { await logout(); navigate('/'); }}
+              style={{ color: '#D4798A' }}
+            >
+              Logout
+            </button>
+          )}
+        </div>
       </nav>
 
       <div className="results-content">
