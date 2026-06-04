@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { generatePaintByNumbers, generatePaintByNumbersML, PBNOptions } from '../services/paintByNumbersService';
 import { usePBNResult } from '../context/PBNContext';
+import { checkAndIncrementLumis, getLumisUsage, LumisUsage } from '../services/lumisRateLimit';
 import './CreatePage.css';
 
 const CreatePage: React.FC = () => {
@@ -10,7 +11,8 @@ const CreatePage: React.FC = () => {
   const { user, logout } = useAuth();
   const { setResult } = usePBNResult();
 
-  const [modelType, setModelType] = useState<'local' | 'ml'>('local');
+  const [modelType, setModelType] = useState<'solera' | 'lumis'>('solera');
+  const [lumisUsage, setLumisUsage] = useState<LumisUsage | null>(null);
   const [difficulty, setDifficulty] = useState<1 | 2 | 3>(2);
   const [nColors, setNColors] = useState(12);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -23,10 +25,17 @@ const CreatePage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (modelType === 'ml' && nColors > 20) {
+    if (modelType === 'lumis' && nColors > 20) {
       setNColors(20);
     }
   }, [modelType, nColors]);
+
+  // Load Lumis usage count when user is logged in
+  useEffect(() => {
+    if (user?.uid) {
+      getLumisUsage(user.uid).then(setLumisUsage).catch(console.error);
+    }
+  }, [user]);
 
   // Smooth trailing spotlight effect (same as landing page)
   useEffect(() => {
@@ -83,32 +92,40 @@ const CreatePage: React.FC = () => {
     try {
       const actualColors = nColors > 20 ? 30 : nColors;
       const options: PBNOptions = { nColors: actualColors, difficulty };
-      
-      const result = modelType === 'ml'
-        ? await generatePaintByNumbersML(
-            selectedFile,
-            options,
-            (stage, percent) => {
-              setProgressStage(stage);
-              setProgressPercent(percent);
-            }
-          )
-        : await generatePaintByNumbers(
-            selectedFile,
-            options,
-            (stage, percent) => {
-              setProgressStage(stage);
-              setProgressPercent(percent);
-            }
-          );
 
-      setResult(result);
-      navigate('/results');
+      if (modelType === 'lumis') {
+        // Check + consume a Lumis credit before hitting the backend
+        if (!user?.uid) throw new Error('You must be signed in to use Lumis.');
+        const usage = await checkAndIncrementLumis(user.uid);
+        setLumisUsage(usage);
+
+        const result = await generatePaintByNumbersML(
+          selectedFile,
+          options,
+          (stage, percent) => {
+            setProgressStage(stage);
+            setProgressPercent(percent);
+          }
+        );
+        setResult(result);
+        navigate('/results');
+      } else {
+        const result = await generatePaintByNumbers(
+          selectedFile,
+          options,
+          (stage, percent) => {
+            setProgressStage(stage);
+            setProgressPercent(percent);
+          }
+        );
+        setResult(result);
+        navigate('/results');
+      }
     } catch (err: any) {
       console.error('Generation failed:', err);
       let errorMsg = 'Something went wrong during processing. Please try again.';
-      if (modelType === 'ml') {
-        errorMsg = `AI Generation failed: ${err.message || err}\n\nPlease ensure your local FastAPI backend is running at http://localhost:8000.\n\nQuick setup: run "uvicorn main:app --reload" inside your "ML Model" directory!`;
+      if (modelType === 'lumis') {
+        errorMsg = `Lumis Error: ${err.message || err}\n\nMake sure your Colab backend is running and the ngrok URL is set in .env`;
       }
       alert(errorMsg);
       setIsProcessing(false);
@@ -227,25 +244,29 @@ const CreatePage: React.FC = () => {
           </h2>
           <div className="create-difficulty-grid">
             <div
-              className={`create-difficulty-card ${modelType === 'local' ? 'active' : ''}`}
-              onClick={() => setModelType('local')}
+              className={`create-difficulty-card ${modelType === 'solera' ? 'active' : ''}`}
+              onClick={() => setModelType('solera')}
             >
-              <h3>Standard Model (Local)</h3>
+              <h3>Solera</h3>
               <p className="create-difficulty-desc">
-                Fast, runs directly in your browser. Perfect for instant offline results.
+                Fast, browser-native engine. KMeans++ color clustering with SLIC superpixels — instant results, no server needed.
               </p>
-              <span className="create-difficulty-detail">Local K-Means Algorithm</span>
+              <span className="create-difficulty-detail">Local · Unlimited · Instant</span>
             </div>
             <div
-              className={`create-difficulty-card ${modelType === 'ml' ? 'active' : ''} recommended`}
-              onClick={() => setModelType('ml')}
+              className={`create-difficulty-card ${modelType === 'lumis' ? 'active' : ''} recommended`}
+              onClick={() => setModelType('lumis')}
             >
               <div className="create-recommended-badge">Premium AI</div>
-              <h3>AI Segmentation (SAM)</h3>
+              <h3>Lumis</h3>
               <p className="create-difficulty-desc">
-                Meta's Segment Anything Model (SAM) recognizes semantic shapes and objects for professional-grade templates.
+                GPU-powered SAM segmentation by Meta. Understands objects and shapes for professional-grade, photorealistic templates.
               </p>
-              <span className="create-difficulty-detail">Requires Local FastAPI Server</span>
+              <span className="create-difficulty-detail">
+                {lumisUsage
+                  ? `${lumisUsage.remaining} of ${lumisUsage.limit} uses left today`
+                  : 'AI · 2 generations/day'}
+              </span>
             </div>
           </div>
         </div>
@@ -283,7 +304,7 @@ const CreatePage: React.FC = () => {
             <input
               type="range"
               min={8}
-              max={modelType === 'local' ? 21 : 20}
+              max={modelType === 'solera' ? 21 : 20}
               value={nColors}
               onChange={(e) => setNColors(Number(e.target.value))}
               className="create-slider"
@@ -291,7 +312,7 @@ const CreatePage: React.FC = () => {
             <div className="create-slider-labels">
               <span>8 (Minimal)</span>
               <span>14 (Balanced)</span>
-              <span>{modelType === 'local' ? '20+' : '20 (Detailed)'}</span>
+              <span>{modelType === 'solera' ? '20+' : '20 (Detailed)'}</span>
             </div>
           </div>
         </div>

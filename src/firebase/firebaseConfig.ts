@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, browserLocalPersistence, setPersistence } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // Firebase config pulled from environment variables (set in .env file)
 // On Vercel, these are set in the Vercel Dashboard → Settings → Environment Variables
@@ -32,5 +33,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 setPersistence(auth, browserLocalPersistence);
 
-export { auth };
+// Initialize Firestore (used for Lumis rate limiting)
+const db = getFirestore(app);
+
+export { auth, db };
 export default app;
