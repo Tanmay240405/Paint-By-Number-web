@@ -33,9 +33,12 @@ class ClassicPBNPipeline:
         self.cfg = config
 
     def load_image(self, data: bytes) -> np.ndarray:
-        arr = np.frombuffer(data, np.uint8)
-        img = cv2.imdecode(arr, cv2.IMREAD_COLOR)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        try:
+            img_pil = Image.open(io.BytesIO(data)).convert("RGB")
+            img = np.array(img_pil)
+        except Exception as e:
+            raise ValueError(f"Could not decode image. Details: {e}. Bytes received: {len(data)}")
+            
         h, w = img.shape[:2]
         scale = self.cfg.target_width / w
         img = cv2.resize(img, (self.cfg.target_width, int(h * scale)), interpolation=cv2.INTER_LANCZOS4)
