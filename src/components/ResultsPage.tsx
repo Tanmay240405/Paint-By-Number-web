@@ -176,7 +176,7 @@ const ResultsPage: React.FC = () => {
             onClick={() => navigate('/paint')}
             style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)', border: 'none' }}
           >
-            Paint Online 🎨
+            Paint Online
           </button>
         </div>
 
