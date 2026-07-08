@@ -7,6 +7,7 @@ import CreatePage from "./components/CreatePage";
 import ResultsPage from "./components/ResultsPage";
 import AuthPage from "./components/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PaintPage from "./components/PaintPage";
 
 const App: React.FC = () => {
   return (
@@ -32,6 +33,14 @@ const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <ResultsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/paint"
+              element={
+                <ProtectedRoute>
+                  <PaintPage />
                 </ProtectedRoute>
               }
             />

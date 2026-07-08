@@ -85,23 +85,7 @@ const LandingPage: React.FC = () => {
     };
   }, []);
 
-  // Scroll Reveal Animation Logic
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
 
-    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <div className="container">
@@ -180,7 +164,7 @@ const LandingPage: React.FC = () => {
       {/* The below thing that comes up */}
       <div className="content-wrapper" style={{ position: 'relative', zIndex: 10 }}>
 
-        <section className="intro-heading-section section reveal" style={{ paddingBottom: '20px', paddingTop: '80px' }}>
+        <section className="intro-heading-section section" style={{ paddingBottom: '20px', paddingTop: '80px' }}>
           <h1 className="main-title gradient-text" style={{
             fontSize: 'clamp(3rem, 10vw, 7rem)',
             fontWeight: 900,
@@ -194,13 +178,13 @@ const LandingPage: React.FC = () => {
 
         {/* How It Works - Step Cards */}
         <section id="how-it-works" className="section">
-          <div className="section-header reveal">
+          <div className="section-header">
             <h2>From Photo to Canvas</h2>
             <p>Three simple steps to unleash your inner artist</p>
           </div>
 
           <div className="steps-grid">
-            <div className="step-card reveal">
+            <div className="step-card">
               <div style={{ position: 'absolute', inset: -20, zIndex: 0, opacity: 0.6, filter: 'blur(10px)' }}>
                 <LiquidEther
                   colors={['#F5E6DD', '#EAD5DA']}
@@ -220,7 +204,7 @@ const LandingPage: React.FC = () => {
                 <p>Choose any photo from your gallery. Drag & drop or click to upload — PNG, JPG, and WEBP supported.</p>
               </div>
             </div>
-            <div className="step-card reveal" style={{ transitionDelay: '0.1s' }}>
+            <div className="step-card" style={{ transitionDelay: '0.1s' }}>
               <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.3, mixBlendMode: 'multiply' }}>
                 <LiquidEther
                   colors={['#E8C4A0', '#D4798A']}
@@ -239,7 +223,7 @@ const LandingPage: React.FC = () => {
                 <p>Pick your difficulty level and choose between 8 to 20 colors for your palette.</p>
               </div>
             </div>
-            <div className="step-card reveal" style={{ transitionDelay: '0.2s' }}>
+            <div className="step-card" style={{ transitionDelay: '0.2s' }}>
               <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.3, mixBlendMode: 'multiply' }}>
                 <LiquidEther
                   colors={['#E8C4A0', '#D4798A']}
@@ -263,12 +247,12 @@ const LandingPage: React.FC = () => {
 
         {/* Modern Bento Grid Features */}
         <section id="features" className="section">
-          <div className="section-header reveal">
+          <div className="section-header">
             <h2>Our Features</h2>
             <p>Made for everyone, whether you're a professional artist or a beginner</p>
           </div>
 
-          <div className="reveal">
+          <div>
             <HTMLCircularGallery bend={-3} startIndex={2}>
               <div className="bento-item">
                 <span className="bento-icon">
@@ -315,12 +299,12 @@ const LandingPage: React.FC = () => {
 
         {/* Enhanced Difficulty Selection */}
         <section id="pricing" className="section">
-          <div className="section-header reveal">
+          <div className="section-header">
             <h2>Choose Your Challenge</h2>
             <p>Find the perfect balance of detail and relaxation</p>
           </div>
 
-          <div className="level-cards reveal">
+          <div className="level-cards">
             <div
               className={`card ${selectedLevel === 1 ? 'selected' : ''}`}
               onClick={() => setSelectedLevel(1)}
@@ -366,7 +350,7 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        <section className="cta-banner reveal">
+        <section className="cta-banner">
           <h2>Ready to Create?</h2>
           <p style={{ marginBottom: '32px', color: 'rgba(255,255,255,0.7)' }}>Click on the button below</p>
           <button className="btn btn-primary" style={{ margin: '0 auto' }} onClick={() => navigate('/create')}>
