@@ -157,7 +157,7 @@ const ResultsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Download Buttons */}
+        {/* Download & Paint Buttons */}
         <div className="results-actions">
           <button
             className="results-btn results-btn-secondary"
@@ -170,6 +170,13 @@ const ResultsPage: React.FC = () => {
             onClick={downloadAll}
           >
             Download All Files
+          </button>
+          <button
+            className="results-btn results-btn-primary"
+            onClick={() => navigate('/paint')}
+            style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)', border: 'none' }}
+          >
+            Paint Online 🎨
           </button>
         </div>
 

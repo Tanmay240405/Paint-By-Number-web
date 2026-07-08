@@ -169,8 +169,8 @@ const CreatePage: React.FC = () => {
           PaintByNumbers.AI
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button 
-            className="btn btn-secondary" 
+          <button
+            className="btn btn-secondary"
             onClick={() => navigate('/')}
             style={{ padding: '10px 20px', fontSize: '0.9rem', fontWeight: 600, borderRadius: '50px' }}
           >
@@ -248,9 +248,6 @@ const CreatePage: React.FC = () => {
               onClick={() => setModelType('solera')}
             >
               <h3>Solera</h3>
-              <p className="create-difficulty-desc">
-                Fast, browser-native engine. KMeans++ color clustering with SLIC superpixels — instant results, no server needed.
-              </p>
               <span className="create-difficulty-detail">Local · Unlimited · Instant</span>
             </div>
             <div
@@ -259,9 +256,7 @@ const CreatePage: React.FC = () => {
             >
               <div className="create-recommended-badge">Premium AI</div>
               <h3>Lumis</h3>
-              <p className="create-difficulty-desc">
-                GPU-powered SAM segmentation by Meta. Understands objects and shapes for professional-grade, photorealistic templates.
-              </p>
+
               <span className="create-difficulty-detail">
                 {lumisUsage
                   ? `${lumisUsage.remaining} of ${lumisUsage.limit} uses left today`

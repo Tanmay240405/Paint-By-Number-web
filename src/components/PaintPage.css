@@ -1,0 +1,356 @@
+.paint-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-dark, #0B0B13);
+  color: var(--text-main, #FFFFFF);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Background effects from global/index but scoped if needed */
+.paint-bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.paint-bg-glow-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.15) 0%, transparent 70%);
+  top: -100px;
+  left: -200px;
+}
+
+.paint-bg-glow-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(103, 232, 249, 0.1) 0%, transparent 70%);
+  bottom: -100px;
+  right: -100px;
+}
+
+/* Nav */
+.paint-nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(11, 11, 19, 0.6);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.paint-nav-logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #A78BFA 0%, #67E8F9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+  letter-spacing: -0.5px;
+}
+
+.paint-nav-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.paint-btn {
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.paint-btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.paint-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.paint-btn-primary {
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  color: #fff;
+}
+
+.paint-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+/* Main Workspace */
+.paint-workspace {
+  display: flex;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Toolbar (Sidebar) */
+.paint-toolbar {
+  width: 320px;
+  background: #151520; /* Solid dark background to ensure text is visible */
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  overflow-y: auto;
+  color: #FFFFFF;
+}
+
+.paint-toolbar h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.paint-tool-section {
+  margin-bottom: 2rem;
+}
+
+.paint-tool-section label {
+  display: block;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* Tool Buttons (Brush / Eraser) */
+.paint-tool-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.paint-tool-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.paint-tool-btn.active {
+  background: rgba(167, 139, 250, 0.2);
+  border-color: #a78bfa;
+  color: #a78bfa;
+}
+
+/* Slider */
+.paint-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.paint-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+.paint-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #a78bfa;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.paint-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.paint-slider-value {
+  width: 30px;
+  text-align: right;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Zoom Controls */
+.paint-zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.paint-zoom-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+
+.paint-zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.paint-zoom-value {
+  flex: 1;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Palette */
+.paint-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.paint-palette-swatch {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+}
+
+.paint-palette-swatch:hover {
+  transform: scale(1.05);
+}
+
+.paint-palette-swatch.active {
+  border-color: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.paint-swatch-num {
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Canvas Area */
+.paint-canvas-area {
+  flex: 1;
+  background: #151520; /* Slightly different dark for workspace */
+  overflow: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Checkered background for transparency if needed */
+  background-image: 
+    linear-gradient(45deg, #1a1a24 25%, transparent 25%),
+    linear-gradient(-45deg, #1a1a24 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1a1a24 75%),
+    linear-gradient(-45deg, transparent 75%, #1a1a24 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.paint-canvas-container {
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  background: #fff; /* Canvas background is white by default to show colors properly */
+  transform-origin: center center;
+  transition: transform 0.1s ease-out;
+  cursor: none; /* We use a custom cursor */
+}
+
+/* Custom Cursor */
+.paint-cursor {
+  position: fixed;
+  border-radius: 50%;
+  border: 1px solid #000;
+  box-shadow: 0 0 0 1px #fff;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+}
+
+.paint-canvas-container.is-panning {
+  cursor: grab;
+}
+
+.paint-canvas-container.is-panning:active {
+  cursor: grabbing;
+}
+
+.paint-canvas-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* Let clicks pass through */
+}
+
+/* The actual canvas the user draws on */
+.paint-draw-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; /* Above background */
+}
+
+/* The template image (lines and numbers) */
+.paint-template-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2; /* Above drawn canvas */
+  pointer-events: none;
+  mix-blend-mode: multiply; /* Crucial: White becomes transparent, black stays black */
+  opacity: 0.8; /* Slightly faded so colors pop more */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .paint-workspace {
+    flex-direction: column-reverse;
+  }
+  .paint-toolbar {
+    width: 100%;
+    height: 250px;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .paint-palette-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
