@@ -481,6 +481,7 @@ export interface PBNResult {
   paletteDataUrl: string;
   referenceDataUrl: string;
   originalDataUrl: string;
+  paintedDataUrl?: string;
   metrics: {
     totalRegions: number;
     avgRegionSize: number;
