@@ -1,74 +1,67 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signOut as firebaseSignOut,
-  sendPasswordResetEmail,
-  sendEmailVerification,
-  onAuthStateChanged,
-  User,
-  UserCredential,
-} from 'firebase/auth';
-import { auth } from '../firebase/firebaseConfig';
+import { supabase } from '../supabase/supabaseClient';
+import { User, Session, AuthError } from '@supabase/supabase-js';
 
-// ─── Google OAuth Provider ───────────────────────────────────────
-const googleProvider = new GoogleAuthProvider();
-// Request email scope for Google sign-in
-googleProvider.addScope('email');
-googleProvider.addScope('profile');
+// ─── Types ──────────────────────────────────────────────────────
+export type SupabaseUser = User;
 
 // ─── Sign Up with Email & Password ──────────────────────────────
-// Creates a new account and sends a verification email
 export const signUpWithEmail = async (
   email: string,
   password: string
-): Promise<UserCredential> => {
-  const credential = await createUserWithEmailAndPassword(auth, email, password);
-
-  // Send verification email
-  if (credential.user) {
-    await sendEmailVerification(credential.user);
-  }
-
-  return credential;
+): Promise<{ user: User | null; session: Session | null; error: AuthError | null }> => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+  return { user: data?.user || null, session: data?.session || null, error };
 };
 
 // ─── Sign In with Email & Password ──────────────────────────────
 export const signInWithEmail = async (
   email: string,
   password: string
-): Promise<UserCredential> => {
-  return signInWithEmailAndPassword(auth, email, password);
+) => {
+  return await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 };
 
-// ─── Sign In with Google (OAuth Popup) ──────────────────────────
-export const signInWithGoogle = async (): Promise<UserCredential> => {
-  return signInWithPopup(auth, googleProvider);
+// ─── Sign In with Google (OAuth) ────────────────────────────────
+export const signInWithGoogle = async () => {
+  return await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.origin,
+    }
+  });
 };
 
 // ─── Sign Out ───────────────────────────────────────────────────
-export const signOut = async (): Promise<void> => {
-  return firebaseSignOut(auth);
+export const signOut = async (): Promise<{ error: AuthError | null }> => {
+  return await supabase.auth.signOut();
 };
 
 // ─── Password Reset ─────────────────────────────────────────────
-// Sends a password reset link to the user's email
-export const resetPassword = async (email: string): Promise<void> => {
-  return sendPasswordResetEmail(auth, email);
+export const resetPassword = async (email: string) => {
+  return await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/reset-password`,
+  });
 };
 
 // ─── Auth State Observer ────────────────────────────────────────
-// Subscribes to auth state changes. Returns an unsubscribe function.
 export const onAuthChange = (
-  callback: (user: User | null) => void
-): (() => void) => {
-  return onAuthStateChanged(auth, callback);
+  callback: (user: User | null, session: Session | null) => void
+): { unsubscribe: () => void } => {
+  const { data } = supabase.auth.onAuthStateChange((event, session) => {
+    callback(session?.user || null, session);
+  });
+  return { unsubscribe: () => data.subscription.unsubscribe() };
 };
 
 // ─── Password Strength Validation ───────────────────────────────
 export interface PasswordStrength {
-  score: number;       // 0-4 (0 = very weak, 4 = very strong)
+  score: number;
   label: string;
   color: string;
   checks: {
@@ -111,25 +104,49 @@ export const isValidEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
-// ─── Firebase Error Messages ────────────────────────────────────
-// Translates cryptic Firebase error codes into friendly messages
-export const getAuthErrorMessage = (errorCode: string): string => {
-  const errorMessages: Record<string, string> = {
-    'auth/email-already-in-use': 'An account with this email already exists. Try signing in instead.',
-    'auth/invalid-email': 'Please enter a valid email address.',
-    'auth/operation-not-allowed': 'This sign-in method is not enabled. Please contact support.',
-    'auth/weak-password': 'Password is too weak. Please use at least 8 characters.',
-    'auth/user-disabled': 'This account has been disabled. Please contact support.',
-    'auth/user-not-found': 'No account found with this email. Please sign up first.',
-    'auth/wrong-password': 'Incorrect password. Please try again or reset your password.',
-    'auth/invalid-credential': 'Invalid email or password. Please check and try again.',
-    'auth/too-many-requests': 'Too many failed attempts. Please wait a moment before trying again.',
-    'auth/network-request-failed': 'Network error. Please check your internet connection.',
-    'auth/popup-closed-by-user': 'Sign-in popup was closed. Please try again.',
-    'auth/popup-blocked': 'Sign-in popup was blocked by your browser. Please allow popups for this site.',
-    'auth/cancelled-popup-request': 'Only one sign-in popup can be open at a time.',
-    'auth/account-exists-with-different-credential': 'An account already exists with this email using a different sign-in method.',
-  };
+// ─── Supabase Error Messages ────────────────────────────────────
+export const getAuthErrorMessage = (error: AuthError | null | any): string => {
+  if (!error) return 'An unexpected error occurred.';
+  const msg = error.message || error.error_description || error;
+  
+  // Custom friendly mapping can be added here
+  if (msg.includes('Invalid login credentials')) return 'Invalid email or password. Please try again.';
+  if (msg.includes('User already registered')) return 'An account with this email already exists.';
+  
+  return msg;
+};
 
-  return errorMessages[errorCode] || 'An unexpected error occurred. Please try again.';
+// ─── 2FA (Multi-Factor Authentication) ──────────────────────────
+export const checkMFA = async () => {
+  const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (error) throw error;
+  return data;
+};
+
+export const enrollMFA = async () => {
+  const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' });
+  if (error) throw error;
+  return data;
+};
+
+export const challengeMFA = async (factorId: string) => {
+  const { data, error } = await supabase.auth.mfa.challenge({ factorId });
+  if (error) throw error;
+  return data;
+};
+
+export const verifyMFA = async (factorId: string, challengeId: string, code: string) => {
+  const { data, error } = await supabase.auth.mfa.verify({
+    factorId,
+    challengeId,
+    code,
+  });
+  if (error) throw error;
+  return data;
+};
+
+export const unenrollMFA = async (factorId: string) => {
+  const { data, error } = await supabase.auth.mfa.unenroll({ factorId });
+  if (error) throw error;
+  return data;
 };

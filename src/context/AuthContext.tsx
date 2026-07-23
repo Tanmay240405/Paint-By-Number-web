@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { User } from 'firebase/auth';
+import { User, Session } from '@supabase/supabase-js';
 import {
   signUpWithEmail,
   signInWithEmail,
@@ -14,6 +14,7 @@ import {
 interface AuthContextType {
   // State
   user: User | null;
+  session: Session | null;
   loading: boolean;
   error: string | null;
 
@@ -24,6 +25,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   clearError: () => void;
+  setErrorState: (msg: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -40,13 +42,15 @@ export const useAuth = (): AuthContextType => {
 // ─── Provider ───────────────────────────────────────────────────
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true); // true until first auth check
   const [error, setError] = useState<string | null>(null);
 
   // Subscribe to auth state changes on mount
   useEffect(() => {
-    const unsubscribe = onAuthChange((firebaseUser) => {
-      setUser(firebaseUser);
+    const { unsubscribe } = onAuthChange((supabaseUser, currentSession) => {
+      setUser(supabaseUser);
+      setSession(currentSession);
       setLoading(false);
     });
 
@@ -56,15 +60,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Clear error
   const clearError = useCallback(() => setError(null), []);
+  const setErrorState = useCallback((msg: string) => setError(msg), []);
 
   // ─── Sign Up ────────────────────────────────────────────────
   const signUp = useCallback(async (email: string, password: string) => {
     try {
       setError(null);
       setLoading(true);
-      await signUpWithEmail(email, password);
+      const { error: signUpError } = await signUpWithEmail(email, password);
+      if (signUpError) throw signUpError;
     } catch (err: any) {
-      const message = getAuthErrorMessage(err.code);
+      const message = getAuthErrorMessage(err);
       setError(message);
       throw new Error(message);
     } finally {
@@ -77,9 +83,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       setError(null);
       setLoading(true);
-      await signInWithEmail(email, password);
+      const { error: signInError } = await signInWithEmail(email, password);
+      if (signInError) throw signInError;
     } catch (err: any) {
-      const message = getAuthErrorMessage(err.code);
+      const message = getAuthErrorMessage(err);
       setError(message);
       throw new Error(message);
     } finally {
@@ -92,9 +99,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       setError(null);
       setLoading(true);
-      await googleSignIn();
+      const { error: signInError } = await googleSignIn();
+      if (signInError) throw signInError;
     } catch (err: any) {
-      const message = getAuthErrorMessage(err.code);
+      const message = getAuthErrorMessage(err);
       setError(message);
       throw new Error(message);
     } finally {
@@ -106,9 +114,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = useCallback(async () => {
     try {
       setError(null);
-      await authSignOut();
+      const { error: signOutError } = await authSignOut();
+      if (signOutError) throw signOutError;
     } catch (err: any) {
-      const message = getAuthErrorMessage(err.code);
+      const message = getAuthErrorMessage(err);
       setError(message);
       throw new Error(message);
     }
@@ -118,9 +127,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const resetPassword = useCallback(async (email: string) => {
     try {
       setError(null);
-      await authResetPassword(email);
+      const { error: resetError } = await authResetPassword(email);
+      if (resetError) throw resetError;
     } catch (err: any) {
-      const message = getAuthErrorMessage(err.code);
+      const message = getAuthErrorMessage(err);
       setError(message);
       throw new Error(message);
     }
@@ -128,6 +138,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const value: AuthContextType = {
     user,
+    session,
     loading,
     error,
     signUp,
@@ -136,6 +147,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     logout,
     resetPassword,
     clearError,
+    setErrorState
   };
 
   return (
