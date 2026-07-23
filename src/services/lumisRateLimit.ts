@@ -1,9 +1,8 @@
 // lumisRateLimit.ts
-// Tracks Lumis (ML) usage per user per day using Firestore.
+// Tracks Lumis (ML) usage per user per day using Supabase.
 // Limit: 2 generations per account per calendar day (UTC).
 
-import { db } from '../firebase/firebaseConfig';
-import { doc, getDoc, setDoc, updateDoc, increment } from 'firebase/firestore';
+import { supabase } from '../supabase/supabaseClient';
 
 const DAILY_LUMIS_LIMIT = 2;
 
@@ -24,10 +23,15 @@ export interface LumisUsage {
  */
 export async function getLumisUsage(userId: string): Promise<LumisUsage> {
   const todayKey = getTodayKey();
-  const ref = doc(db, 'lumis_usage', `${userId}_${todayKey}`);
-  const snap = await getDoc(ref);
+  const id = `${userId}_${todayKey}`;
+  
+  const { data, error } = await supabase
+    .from('lumis_usage')
+    .select('count')
+    .eq('id', id)
+    .single();
 
-  const used = snap.exists() ? (snap.data().count ?? 0) : 0;
+  const used = data?.count ?? 0;
 
   return {
     used,
@@ -43,10 +47,16 @@ export async function getLumisUsage(userId: string): Promise<LumisUsage> {
  */
 export async function checkAndIncrementLumis(userId: string): Promise<LumisUsage> {
   const todayKey = getTodayKey();
-  const ref = doc(db, 'lumis_usage', `${userId}_${todayKey}`);
-  const snap = await getDoc(ref);
+  const id = `${userId}_${todayKey}`;
 
-  const currentCount = snap.exists() ? (snap.data().count ?? 0) : 0;
+  // 1. Fetch current usage
+  const { data: fetchResult, error: fetchError } = await supabase
+    .from('lumis_usage')
+    .select('count')
+    .eq('id', id)
+    .single();
+
+  const currentCount = fetchResult?.count ?? 0;
 
   if (currentCount >= DAILY_LUMIS_LIMIT) {
     throw new Error(
@@ -55,18 +65,20 @@ export async function checkAndIncrementLumis(userId: string): Promise<LumisUsage
     );
   }
 
-  // Increment or create the document
-  if (snap.exists()) {
-    await updateDoc(ref, { count: increment(1) });
-  } else {
-    await setDoc(ref, {
-      userId,
-      date: todayKey,
-      count: 1,
-    });
-  }
-
   const newCount = currentCount + 1;
+
+  // 2. Upsert usage
+  const { error: upsertError } = await supabase
+    .from('lumis_usage')
+    .upsert({
+      id: id,
+      user_id: userId,
+      date: todayKey,
+      count: newCount
+    });
+
+  if (upsertError) throw upsertError;
+
   return {
     used: newCount,
     limit: DAILY_LUMIS_LIMIT,
