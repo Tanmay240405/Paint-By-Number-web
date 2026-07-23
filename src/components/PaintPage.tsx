@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePBNResult } from '../context/PBNContext';
+import { useAuth } from '../context/AuthContext';
+import { savePaintingProgress } from '../services/communityService';
 import './PaintPage.css';
 
 const PaintPage: React.FC = () => {
   const navigate = useNavigate();
-  const { result } = usePBNResult();
+  const { result, activePaintingId, setActivePaintingId } = usePBNResult();
+  const { user } = useAuth();
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -16,6 +19,7 @@ const PaintPage: React.FC = () => {
   const [selectedColor, setSelectedColor] = useState<string>('#ffffff');
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   
   // Custom cursor state
   const [mousePos, setMousePos] = useState<{ x: number, y: number } | null>(null);
@@ -36,13 +40,29 @@ const PaintPage: React.FC = () => {
   useEffect(() => {
     if (result?.templateDataUrl) {
       const img = new Image();
+      img.crossOrigin = 'anonymous';
       img.onload = () => {
         setDimensions({ width: img.width, height: img.height });
-        // Initial zoom to fit screen (optional, but 1 is fine for now)
       };
       img.src = result.templateDataUrl;
     }
   }, [result]);
+
+  // Load saved painting strokes
+  useEffect(() => {
+    if (dimensions.width > 0 && result?.paintedDataUrl && canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      if (!ctx) return;
+      const paintedImg = new Image();
+      paintedImg.crossOrigin = 'anonymous';
+      paintedImg.onload = () => {
+        // We do not clearRect here because user might have just resized or loaded
+        // Actually, setting dimensions clears the canvas natively, so we just draw:
+        ctx.drawImage(paintedImg, 0, 0, dimensions.width, dimensions.height);
+      };
+      paintedImg.src = result.paintedDataUrl;
+    }
+  }, [dimensions, result?.paintedDataUrl]);
 
   // Prevent default touch actions (like scrolling) on the canvas to allow drawing
   useEffect(() => {
@@ -65,6 +85,7 @@ const PaintPage: React.FC = () => {
   if (!result) {
     return (
       <div className="paint-container" style={{ alignItems: 'center', justifyContent: 'center' }}>
+
         <h2>No image to paint.</h2>
         <button className="paint-btn paint-btn-primary" onClick={() => navigate('/create')} style={{ marginTop: '20px' }}>
           Go to Create
@@ -182,26 +203,89 @@ const PaintPage: React.FC = () => {
     a.click();
   };
 
+  const handleSaveProgress = async () => {
+    if (!user) {
+      alert("Please login to save your progress.");
+      navigate('/login');
+      return;
+    }
+    if (!canvasRef.current || !result) return;
+    
+    setIsSaving(true);
+    try {
+      const canvasDataUrl = canvasRef.current.toDataURL('image/png');
+      const paintingRecord = {
+        id: activePaintingId || undefined,
+        user_id: user.id,
+        name: 'My Masterpiece',
+        original_image_url: result.originalDataUrl,
+        template_image_url: result.templateDataUrl,
+        palette_image_url: result.paletteDataUrl,
+        reference_image_url: result.referenceDataUrl || '',
+        painted_canvas_url: '', // will be set in service
+        palette_json: result.palette,
+        metrics_json: result.metrics,
+        completed: false,
+        submitted: false,
+      };
+
+      const saved = await savePaintingProgress(paintingRecord, canvasDataUrl);
+      setActivePaintingId(saved.id!);
+      alert("Progress saved successfully!");
+    } catch (err: any) {
+      console.error(err);
+      alert("Failed to save progress: " + err.message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="paint-container">
       <div className="paint-bg-glow paint-bg-glow-1" />
       <div className="paint-bg-glow paint-bg-glow-2" />
 
-      <nav className="paint-nav">
-        <div className="paint-nav-logo" onClick={() => navigate('/results')}>
-          ← Back to Results
-        </div>
-        <div className="paint-nav-actions">
-          <button className="paint-btn paint-btn-primary" onClick={handleDownload}>
-            Download Painting
-          </button>
-        </div>
-      </nav>
-
       <div className="paint-workspace">
         {/* Toolbar */}
-        <div className="paint-toolbar">
+        <div className="paint-toolbar" style={{ paddingTop: '30px' }}>
+          <div style={{ marginBottom: '30px' }}>
+            <button 
+              onClick={() => navigate(-1)} 
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '6px', 
+                padding: '0', 
+                border: 'none', 
+                background: 'transparent', 
+                cursor: 'pointer', 
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: '0.95rem',
+                fontWeight: '500',
+                transition: 'color 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              Back
+            </button>
+          </div>
+
           <h3>Tools</h3>
+          
+          <div className="paint-tool-section" style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+            {user && (
+              <button className="paint-btn paint-btn-secondary" onClick={handleSaveProgress} disabled={isSaving} style={{ width: '100%' }}>
+                {isSaving ? 'Saving...' : 'Save Progress'}
+              </button>
+            )}
+            <button className="paint-btn paint-btn-primary" onClick={handleDownload} style={{ width: '100%' }}>
+              Download
+            </button>
+          </div>
           
           <div className="paint-tool-section">
             <div className="paint-tool-buttons">
@@ -320,6 +404,7 @@ const PaintPage: React.FC = () => {
             <img 
               ref={imgRef}
               src={result.templateDataUrl} 
+              crossOrigin="anonymous"
               alt="Template Layer" 
               className="paint-template-img" 
               style={{ width: dimensions.width, height: dimensions.height }}

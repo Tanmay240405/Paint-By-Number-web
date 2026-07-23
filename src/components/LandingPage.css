@@ -153,53 +153,6 @@ body::after {
   transform: translateY(0);
 }
 
-/* Modern Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  position: sticky;
-  top: 20px;
-  margin: 0 20px;
-  border-radius: 16px;
-  background: rgba(253, 251, 247, 0.75);
-  backdrop-filter: blur(20px);
-  z-index: 100;
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  background: linear-gradient(135deg, var(--text-main) 30%, var(--primary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.nav-links {
-  display: flex;
-  gap: 40px;
-  background: rgba(30, 30, 42, 0.03);
-  padding: 8px 24px;
-  border-radius: 50px;
-  border: 1px solid rgba(30, 30, 42, 0.05);
-}
-
-.nav-links a {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.3s ease;
-  font-weight: 500;
-}
-
-.nav-links a:hover {
-  color: var(--primary);
-}
-
 /* Enhanced Hero Section */
 .hero {
   text-align: center;
@@ -524,7 +477,7 @@ body::after {
 
 /* CTA Footer */
 .cta-banner {
-  margin: 100px 20px;
+  margin: 100px 20px 60px;
   background: radial-gradient(circle at center, #FDFBF7 0%, #F5F2EA 100%);
   border: 1px solid var(--glass-border);
   border-radius: 32px;
@@ -572,17 +525,6 @@ body::after {
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    padding: 16px;
-    top: 0;
-    margin: 0;
-    border-radius: 0;
-    border-top: none;
-  }
-
-  .nav-links {
-    display: none;
-  }
 
   .hero h1 {
     font-size: 2.5rem;
