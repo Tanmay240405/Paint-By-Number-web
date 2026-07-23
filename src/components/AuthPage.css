@@ -94,6 +94,7 @@
   border: 1px solid rgba(199, 155, 167, 0.25);
   border-radius: 28px;
   padding: 48px 40px;
+  margin-top: 60px;
   box-shadow:
     0 24px 80px -12px rgba(0, 0, 0, 0.08),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;

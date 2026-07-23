@@ -8,12 +8,16 @@ import ResultsPage from "./components/ResultsPage";
 import AuthPage from "./components/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PaintPage from "./components/PaintPage";
+import ProfilePage from "./components/ProfilePage";
+import CommunityPage from "./components/CommunityPage";
+import Navbar from "./components/Navbar";
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
       <PBNProvider>
         <Router>
+          <Navbar />
           <Routes>
             {/* Public routes */}
             <Route path="/" element={<LandingPage />} />
@@ -43,6 +47,18 @@ const App: React.FC = () => {
                   <PaintPage />
                 </ProtectedRoute>
               }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/community"
+              element={<CommunityPage />}
             />
           </Routes>
         </Router>
