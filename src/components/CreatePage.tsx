@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { generatePaintByNumbers, generatePaintByNumbersML, PBNOptions } from '../services/paintByNumbersService';
 import { usePBNResult } from '../context/PBNContext';
@@ -8,6 +8,7 @@ import './CreatePage.css';
 
 const CreatePage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
   const { setResult } = usePBNResult();
 
@@ -32,8 +33,8 @@ const CreatePage: React.FC = () => {
 
   // Load Lumis usage count when user is logged in
   useEffect(() => {
-    if (user?.uid) {
-      getLumisUsage(user.uid).then(setLumisUsage).catch(console.error);
+    if (user?.id) {
+      getLumisUsage(user.id).then(setLumisUsage).catch(console.error);
     }
   }, [user]);
 
@@ -76,6 +77,23 @@ const CreatePage: React.FC = () => {
     setPreview(url);
   }, []);
 
+  useEffect(() => {
+    const preloadImage = async () => {
+      const state = location.state as { imageUrl?: string } | null;
+      if (state?.imageUrl) {
+        try {
+          const res = await fetch(state.imageUrl);
+          const blob = await res.blob();
+          const file = new File([blob], 'inspiration.jpg', { type: blob.type || 'image/jpeg' });
+          handleFileSelect(file);
+        } catch (err) {
+          console.error("Failed to load preloaded image", err);
+        }
+      }
+    };
+    preloadImage();
+  }, [location.state, handleFileSelect]);
+
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
@@ -95,8 +113,8 @@ const CreatePage: React.FC = () => {
 
       if (modelType === 'lumis') {
         // Check + consume a Lumis credit before hitting the backend
-        if (!user?.uid) throw new Error('You must be signed in to use Lumis.');
-        const usage = await checkAndIncrementLumis(user.uid);
+        if (!user?.id) throw new Error('You must be signed in to use Lumis.');
+        const usage = await checkAndIncrementLumis(user.id);
         setLumisUsage(usage);
 
         const result = await generatePaintByNumbersML(
@@ -163,31 +181,6 @@ const CreatePage: React.FC = () => {
       <div className="create-bg-glow create-bg-glow-1" />
       <div className="create-bg-glow create-bg-glow-2" />
 
-      {/* Nav */}
-      <nav className="create-nav">
-        <div className="create-nav-logo" onClick={() => navigate('/')}>
-          PaintByNumbers.AI
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button
-            className="btn btn-secondary"
-            onClick={() => navigate('/')}
-            style={{ padding: '10px 20px', fontSize: '0.9rem', fontWeight: 600, borderRadius: '50px' }}
-          >
-            ← Back to Home
-          </button>
-          {user && (
-            <button
-              className="btn btn-secondary"
-              onClick={async () => { await logout(); navigate('/'); }}
-              style={{ padding: '10px 20px', fontSize: '0.9rem', fontWeight: 600, borderRadius: '50px' }}
-            >
-              Logout
-            </button>
-          )}
-        </div>
-      </nav>
-
       {/* Main Content */}
       <div className="create-content">
         <div className="create-header">
@@ -248,19 +241,17 @@ const CreatePage: React.FC = () => {
               onClick={() => setModelType('solera')}
             >
               <h3>Solera</h3>
-              <span className="create-difficulty-detail">Local · Unlimited · Instant</span>
+              <span className="create-difficulty-detail">Unlimited · Instant</span>
             </div>
             <div
-              className={`create-difficulty-card ${modelType === 'lumis' ? 'active' : ''} recommended`}
-              onClick={() => setModelType('lumis')}
+              className={`create-difficulty-card`}
+              style={{ opacity: 0.5, cursor: 'not-allowed' }}
             >
-              <div className="create-recommended-badge">Premium AI</div>
+              <div className="create-recommended-badge" style={{ background: '#718096', boxShadow: 'none' }}>Premium AI</div>
               <h3>Lumis</h3>
 
               <span className="create-difficulty-detail">
-                {lumisUsage
-                  ? `${lumisUsage.remaining} of ${lumisUsage.limit} uses left today`
-                  : 'AI · 2 generations/day'}
+                Coming soon
               </span>
             </div>
           </div>
