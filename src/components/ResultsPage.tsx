@@ -61,35 +61,7 @@ const ResultsPage: React.FC = () => {
       <div className="results-bg-glow results-bg-glow-2" />
 
       {/* Nav */}
-      <nav className="results-nav">
-        <div className="results-nav-logo" onClick={() => navigate('/')}>
-          PaintByNumbers.AI
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {user && (
-            <span style={{
-              fontSize: '0.9rem',
-              fontWeight: 600,
-              color: 'var(--text-main, #1E1E2A)',
-              opacity: 0.7,
-            }}>
-              Hello, {user.displayName?.split(' ')[0] || user.email?.split('@')[0] || 'there'}
-            </span>
-          )}
-          <button className="results-nav-back" onClick={() => navigate('/create')}>
-            ← Create Another
-          </button>
-          {user && (
-            <button
-              className="results-nav-back"
-              onClick={async () => { await logout(); navigate('/'); }}
-              style={{ color: '#D4798A' }}
-            >
-              Logout
-            </button>
-          )}
-        </div>
-      </nav>
+
 
       <div className="results-content">
         {/* Header */}
