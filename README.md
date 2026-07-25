@@ -14,8 +14,12 @@ Transform any photo into a stunning paint-by-numbers masterpiece instantly using
 
 ## 📸 Screenshots
 
-### Community Masterpieces
-![Community Page](docs/community.png)
+### Community: Inspiration Templates
+![Community Templates](docs/community_templates.png)
+*Find inspiration and start a new project from popular templates.*
+
+### Community: Recent Masterpieces
+![Community Posts](docs/community_posts.png)
 *Browse and vote on beautiful artworks created by the community.*
 
 ### Your Profile & Gallery
