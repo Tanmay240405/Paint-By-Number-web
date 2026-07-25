@@ -197,7 +197,7 @@ const CommunityPage: React.FC = () => {
                       >
                         <div className="coverflow-img-wrapper">
                           <img 
-                            src={sub.paintings?.painted_canvas_url || sub.paintings?.template_image_url} 
+                            src={sub.paintings?.painted_canvas_url || sub.paintings?.template_image_url || sub.paintings?.original_image_url} 
                             alt={sub.paintings?.name} 
                             className="coverflow-img"
                           />
