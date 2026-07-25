@@ -5,7 +5,8 @@ import { usePBNResult } from '../context/PBNContext';
 import { 
   getUserPaintings, 
   PaintingRecord, 
-  postPaintingToCommunity 
+  postPaintingToCommunity,
+  renamePainting
 } from '../services/communityService';
 import './ProfilePage.css';
 
@@ -16,6 +17,8 @@ const ProfilePage: React.FC = () => {
 
   const [paintings, setPaintings] = useState<PaintingRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState('');
 
   useEffect(() => {
     if (!user) {
@@ -69,6 +72,18 @@ const ProfilePage: React.FC = () => {
     } catch (err: any) {
       console.error(err);
       alert('Failed to post: ' + err.message);
+    }
+  };
+
+  const handleSaveName = async (id: string) => {
+    if (!editName.trim()) return;
+    try {
+      await renamePainting(id, editName.trim());
+      setPaintings(prev => prev.map(p => p.id === id ? { ...p, name: editName.trim() } : p));
+      setEditingId(null);
+    } catch (err) {
+      console.error('Failed to rename', err);
+      alert('Failed to rename painting');
     }
   };
 
@@ -126,7 +141,35 @@ const ProfilePage: React.FC = () => {
                       )}
                     </div>
                     <div className="gallery-card-content">
-                      <h3 className="gallery-card-title">{p.name}</h3>
+                      {editingId === p.id ? (
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                          <input 
+                            type="text" 
+                            value={editName} 
+                            onChange={e => setEditName(e.target.value)} 
+                            onKeyDown={e => {
+                              if (e.key === 'Enter') handleSaveName(p.id!);
+                              if (e.key === 'Escape') setEditingId(null);
+                            }}
+                            autoFocus
+                            style={{ flex: 1, padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '1.2rem', fontWeight: 600, color: '#333' }}
+                          />
+                          <button onClick={() => handleSaveName(p.id!)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#4f46e5' }} title="Save">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </button>
+                        </div>
+                      ) : (
+                        <h3 className="gallery-card-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          {p.name}
+                          <button 
+                            onClick={() => { setEditingId(p.id!); setEditName(p.name); }}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888', padding: '2px', display: 'flex' }}
+                            title="Edit name"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                          </button>
+                        </h3>
+                      )}
                       <p className="gallery-card-date">
                         Last saved: {new Date(p.last_saved!).toLocaleDateString()}
                       </p>

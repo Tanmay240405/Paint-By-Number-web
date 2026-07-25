@@ -137,6 +137,11 @@ export async function deletePainting(id: string): Promise<void> {
   if (error) throw error;
 }
 
+export async function renamePainting(id: string, newName: string): Promise<void> {
+  const { error } = await supabase.from('paintings').update({ name: newName }).eq('id', id);
+  if (error) throw error;
+}
+
 // ─── Community Gallery ──────────────────────────────────────────
 
 export interface CommunityPostSubmission {
