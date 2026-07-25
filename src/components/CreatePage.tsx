@@ -9,11 +9,11 @@ import './CreatePage.css';
 const CreatePage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { setResult } = usePBNResult();
 
   const [modelType, setModelType] = useState<'solera' | 'lumis'>('solera');
-  const [lumisUsage, setLumisUsage] = useState<LumisUsage | null>(null);
+  const [, setLumisUsage] = useState<LumisUsage | null>(null);
   const [difficulty, setDifficulty] = useState<1 | 2 | 3>(2);
   const [nColors, setNColors] = useState(12);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

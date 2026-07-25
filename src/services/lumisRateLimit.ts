@@ -25,7 +25,7 @@ export async function getLumisUsage(userId: string): Promise<LumisUsage> {
   const todayKey = getTodayKey();
   const id = `${userId}_${todayKey}`;
   
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('lumis_usage')
     .select('count')
     .eq('id', id)
@@ -50,7 +50,7 @@ export async function checkAndIncrementLumis(userId: string): Promise<LumisUsage
   const id = `${userId}_${todayKey}`;
 
   // 1. Fetch current usage
-  const { data: fetchResult, error: fetchError } = await supabase
+  const { data: fetchResult } = await supabase
     .from('lumis_usage')
     .select('count')
     .eq('id', id)

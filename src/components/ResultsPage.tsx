@@ -8,7 +8,7 @@ type TabKey = 'template' | 'palette' | 'reference' | 'original';
 
 const ResultsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  useAuth();
   const { result } = usePBNResult();
   const [activeTab, setActiveTab] = useState<TabKey>('template');
 

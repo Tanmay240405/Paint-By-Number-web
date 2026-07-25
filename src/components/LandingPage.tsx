@@ -9,7 +9,7 @@ import "./LandingPage.css";
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  useAuth();
   const [winner, setWinner] = useState<CommunityPostSubmission | null>(null);
 
   const heroImageRef = useRef<HTMLDivElement>(null);
