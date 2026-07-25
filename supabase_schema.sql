@@ -56,6 +56,9 @@ ALTER TABLE draw_votes ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view their own paintings" ON paintings
   FOR SELECT USING (auth.uid() = user_id);
 
+CREATE POLICY "Anyone can view submitted paintings" ON paintings
+  FOR SELECT USING (submitted = true);
+
 CREATE POLICY "Users can insert their own paintings" ON paintings
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
