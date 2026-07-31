@@ -12,6 +12,9 @@ export const signUpWithEmail = async (
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      emailRedirectTo: `${window.location.origin}/profile`,
+    },
   });
   return { user: data?.user || null, session: data?.session || null, error };
 };
