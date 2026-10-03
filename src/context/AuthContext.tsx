@@ -3,7 +3,6 @@ import { User, Session } from '@supabase/supabase-js';
 import {
   signUpWithEmail,
   signInWithEmail,
-  signInWithGoogle as googleSignIn,
   signOut as authSignOut,
   resetPassword as authResetPassword,
   onAuthChange,
@@ -21,7 +20,6 @@ interface AuthContextType {
   // Actions
   signUp: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   clearError: () => void;
@@ -94,21 +92,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  // ─── Google Sign In ─────────────────────────────────────────
-  const signInWithGoogle = useCallback(async () => {
-    try {
-      setError(null);
-      setLoading(true);
-      const { error: signInError } = await googleSignIn();
-      if (signInError) throw signInError;
-    } catch (err: any) {
-      const message = getAuthErrorMessage(err);
-      setError(message);
-      throw new Error(message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+
 
   // ─── Logout ─────────────────────────────────────────────────
   const logout = useCallback(async () => {
@@ -143,7 +127,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     error,
     signUp,
     signIn,
-    signInWithGoogle,
     logout,
     resetPassword,
     clearError,

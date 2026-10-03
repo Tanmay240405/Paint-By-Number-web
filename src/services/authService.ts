@@ -30,16 +30,6 @@ export const signInWithEmail = async (
   });
 };
 
-// ─── Sign In with Google (OAuth) ────────────────────────────────
-export const signInWithGoogle = async () => {
-  return await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: window.location.origin,
-    }
-  });
-};
-
 // ─── Sign Out ───────────────────────────────────────────────────
 export const signOut = async (): Promise<{ error: AuthError | null }> => {
   return await supabase.auth.signOut();
@@ -119,37 +109,3 @@ export const getAuthErrorMessage = (error: AuthError | null | any): string => {
   return msg;
 };
 
-// ─── 2FA (Multi-Factor Authentication) ──────────────────────────
-export const checkMFA = async () => {
-  const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-  if (error) throw error;
-  return data;
-};
-
-export const enrollMFA = async () => {
-  const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' });
-  if (error) throw error;
-  return data;
-};
-
-export const challengeMFA = async (factorId: string) => {
-  const { data, error } = await supabase.auth.mfa.challenge({ factorId });
-  if (error) throw error;
-  return data;
-};
-
-export const verifyMFA = async (factorId: string, challengeId: string, code: string) => {
-  const { data, error } = await supabase.auth.mfa.verify({
-    factorId,
-    challengeId,
-    code,
-  });
-  if (error) throw error;
-  return data;
-};
-
-export const unenrollMFA = async (factorId: string) => {
-  const { data, error } = await supabase.auth.mfa.unenroll({ factorId });
-  if (error) throw error;
-  return data;
-};
